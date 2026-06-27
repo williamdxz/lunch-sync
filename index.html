@@ -7,45 +7,27 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍽️</text></svg>">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --bg: #F7F6F3;
-      --surface: #FFFFFF;
-      --text: #1A1A1A;
-      --text-muted: #7A7A7A;
-      --green: #3A7D5C;
-      --green-light: #E8F3ED;
-      --coral: #D96B4F;
-      --coral-light: #FDEEE9;
-      --border: #E8E6E1;
-      --overlap: #3A7D5C;
-      --radius: 14px;
+      --bg: #F7F6F3; --surface: #FFFFFF; --text: #1A1A1A; --text-muted: #7A7A7A;
+      --green: #3A7D5C; --green-light: #E8F3ED; --green-mid: #b6dcc8;
+      --coral: #D96B4F; --coral-light: #FDEEE9; --coral-mid: #f0bdb0;
+      --overlap-bg: #2D5A46; --border: #E8E6E1; --radius: 14px;
       --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
     }
-
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100dvh;
-      line-height: 1.5;
-      -webkit-font-smoothing: antialiased;
+      background: var(--bg); color: var(--text); min-height: 100dvh;
+      line-height: 1.5; -webkit-font-smoothing: antialiased;
     }
-
     .container { max-width: 420px; margin: 0 auto; padding: 20px 16px 40px; }
-
     header { text-align: center; padding: 24px 0 20px; }
     header .icon { font-size: 36px; margin-bottom: 4px; }
     header h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.3px; }
     header .date { font-size: 14px; color: var(--text-muted); margin-top: 2px; }
 
     .card {
-      background: var(--surface);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 20px;
-      margin-bottom: 14px;
-      border: 1px solid var(--border);
+      background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow);
+      padding: 20px; margin-bottom: 14px; border: 1px solid var(--border);
     }
     .card-label {
       font-size: 11px; font-weight: 600; text-transform: uppercase;
@@ -62,18 +44,6 @@
     .identity-btn .emoji { font-size: 32px; }
     .identity-btn .label { font-size: 15px; font-weight: 600; color: var(--text); }
 
-    .time-row { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
-    .time-row:last-of-type { margin-bottom: 0; }
-    .time-label { font-size: 14px; color: var(--text-muted); width: 42px; flex-shrink: 0; }
-    input[type="time"] {
-      flex: 1; font-size: 18px; font-family: inherit; font-weight: 600;
-      padding: 12px 14px; border: 2px solid var(--border); border-radius: 10px;
-      background: var(--surface); color: var(--text);
-      -webkit-appearance: none; appearance: none; outline: none; transition: border-color 0.15s;
-    }
-    input[type="time"]:focus { border-color: var(--green); }
-
-    .btn-row { display: flex; gap: 10px; margin-top: 16px; }
     .btn {
       display: block; width: 100%; padding: 14px; border: none; border-radius: 10px;
       font-size: 15px; font-weight: 600; font-family: inherit; cursor: pointer; transition: all 0.15s ease;
@@ -82,36 +52,65 @@
     .btn-primary { background: var(--green); color: white; }
     .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
     .btn-outline { background: none; border: 2px solid var(--border); color: var(--coral); padding: 12px; }
+    .btn-row { display: flex; gap: 10px; margin-top: 16px; }
 
-    .partner-status { text-align: center; padding: 16px 0; }
-    .partner-status .emoji { font-size: 28px; margin-bottom: 6px; }
-    .partner-status .message { font-size: 14px; color: var(--text-muted); }
-    .partner-time { text-align: center; padding: 8px 0; }
-    .partner-time .range { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; }
-    .partner-time .updated { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+    /* ===== Time Grid ===== */
+    .grid-wrap { user-select: none; -webkit-user-select: none; touch-action: none; }
+    .grid-header {
+      display: grid; grid-template-columns: 48px 1fr 1fr; gap: 0;
+      margin-bottom: 4px; padding: 0 2px;
+    }
+    .grid-header span {
+      font-size: 11px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.5px; color: var(--text-muted); text-align: center;
+    }
+    .grid-header span:first-child { text-align: left; }
 
-    .timeline-wrap { margin-top: 16px; }
-    .timeline-bar { position: relative; height: 10px; background: #EDECEA; border-radius: 5px; overflow: hidden; }
-    .timeline-segment { position: absolute; top: 0; height: 100%; border-radius: 5px; transition: left 0.3s, width 0.3s; }
-    .timeline-segment.you { background: var(--green); opacity: 0.5; }
-    .timeline-segment.partner { background: var(--coral); opacity: 0.5; }
-    .timeline-segment.overlap { background: var(--overlap); opacity: 0.85; }
-    .timeline-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); margin-top: 4px; }
-    .timeline-legend { display: flex; justify-content: center; gap: 16px; margin-top: 10px; font-size: 12px; color: var(--text-muted); }
-    .legend-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 4px; vertical-align: middle; }
-    .legend-dot.you { background: var(--green); }
-    .legend-dot.partner { background: var(--coral); }
-    .legend-dot.overlap-dot { background: var(--overlap); }
+    .grid-body {
+      border: 1px solid var(--border); border-radius: 10px; overflow: hidden;
+    }
+    .grid-row {
+      display: grid; grid-template-columns: 48px 1fr 1fr;
+      border-bottom: 1px solid #f0efec; min-height: 28px;
+    }
+    .grid-row:last-child { border-bottom: none; }
+    .grid-row.half-hour { border-bottom-color: var(--border); }
+    .grid-time {
+      font-size: 11px; color: var(--text-muted); padding: 2px 6px 0 2px;
+      display: flex; align-items: flex-start; justify-content: flex-end;
+      line-height: 1;
+    }
+    .grid-cell {
+      border-left: 1px solid #f0efec; position: relative;
+      transition: background-color 0.08s;
+    }
+    .grid-cell.mine { cursor: pointer; }
+    .grid-cell.mine:hover { background: #f5f5f2; }
+    .grid-cell.mine.selected { background: var(--green-mid); }
+    .grid-cell.mine.selecting { background: var(--green-light); }
+    .grid-cell.partner-on { background: var(--coral-mid); }
+    .grid-cell.overlap { background: var(--overlap-bg) !important; }
 
-    .overlap-result { text-align: center; margin-top: 14px; padding: 12px; border-radius: 10px; }
+    .grid-legend {
+      display: flex; justify-content: center; gap: 16px; margin-top: 10px;
+      font-size: 12px; color: var(--text-muted);
+    }
+    .legend-swatch {
+      display: inline-block; width: 12px; height: 12px; border-radius: 3px;
+      margin-right: 4px; vertical-align: middle;
+    }
+
+    /* Overlap result banner */
+    .overlap-result {
+      text-align: center; margin-top: 14px; padding: 12px; border-radius: 10px;
+    }
     .overlap-result.has-overlap { background: var(--green-light); color: var(--green); }
     .overlap-result.no-overlap { background: var(--coral-light); color: var(--coral); }
-    .overlap-result .label { font-size: 12px; font-weight: 500; }
-    .overlap-result .value { font-size: 18px; font-weight: 700; margin-top: 2px; }
+    .overlap-result .ov-label { font-size: 12px; font-weight: 500; }
+    .overlap-result .ov-value { font-size: 18px; font-weight: 700; margin-top: 2px; }
 
     .screen { display: none; }
     .screen.active { display: block; }
-
     .setup-screen { text-align: center; padding-top: 40px; }
     .setup-screen h2 { font-size: 20px; margin-bottom: 6px; }
     .setup-screen p { font-size: 14px; color: var(--text-muted); margin-bottom: 24px; }
@@ -120,39 +119,37 @@
     .name-input {
       flex: 1; font-size: 15px; font-family: inherit; font-weight: 600;
       padding: 10px 12px; border: 2px solid var(--border); border-radius: 10px;
-      background: var(--surface); color: var(--text); outline: none; transition: border-color 0.15s;
+      background: var(--surface); color: var(--text); outline: none;
     }
     .name-input:focus { border-color: var(--green); }
     .btn-small {
       padding: 10px 16px; border: none; border-radius: 10px; font-size: 13px;
       font-weight: 600; font-family: inherit; cursor: pointer; background: var(--green); color: white;
     }
-
     .settings-link { text-align: center; margin-top: 10px; }
     .settings-link button {
       background: none; border: none; font-size: 13px; color: var(--text-muted);
       cursor: pointer; font-family: inherit; text-decoration: underline;
       text-decoration-style: dotted; text-underline-offset: 3px;
     }
-
     .toast {
-      position: fixed; bottom: 30px; left: 50%;
-      transform: translateX(-50%) translateY(20px);
+      position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(20px);
       background: var(--text); color: white; padding: 10px 20px; border-radius: 20px;
       font-size: 14px; font-weight: 500; opacity: 0; transition: all 0.25s ease;
       pointer-events: none; z-index: 100; white-space: nowrap;
     }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
-    .conn-status { display: flex; align-items: center; justify-content: center; gap: 5px; font-size: 11px; color: var(--text-muted); margin-top: 16px; }
+    .conn-status {
+      display: flex; align-items: center; justify-content: center; gap: 5px;
+      font-size: 11px; color: var(--text-muted); margin-top: 16px;
+    }
     .conn-dot { width: 6px; height: 6px; border-radius: 50%; background: #ccc; }
     .conn-dot.connected { background: var(--green); }
 
     .config-input {
-      width: 100%; font-size: 13px; font-family: 'SF Mono', 'Menlo', 'Consolas', monospace;
+      width: 100%; font-size: 13px; font-family: 'SF Mono','Menlo','Consolas',monospace;
       padding: 12px; border: 2px solid var(--border); border-radius: 10px;
-      background: var(--surface); color: var(--text); outline: none;
-      transition: border-color 0.15s; margin-bottom: 12px;
+      background: var(--surface); color: var(--text); outline: none; margin-bottom: 12px;
     }
     .config-input:focus { border-color: var(--green); }
     .config-input::placeholder { font-family: inherit; color: #bbb; }
@@ -161,7 +158,6 @@
   </style>
 </head>
 <body>
-
 <div class="container">
   <header>
     <div class="icon">🍽️</div>
@@ -169,11 +165,11 @@
     <div class="date" id="todayDate"></div>
   </header>
 
-  <!-- Screen 1: Supabase config (first time only per device) -->
-  <div class="screen" id="screenConfig">
-    <div class="setup-screen" style="padding-top:20px; text-align:left;">
+  <!-- Screen 1: Config -->
+  <div class="screen active" id="screenConfig">
+    <div class="setup-screen" style="padding-top:20px;text-align:left;">
       <h2 style="text-align:center;">First-time setup</h2>
-      <p style="text-align:center;">Paste your Supabase credentials below. You only need to do this once per device.</p>
+      <p style="text-align:center;">Paste your Supabase credentials below. Once per device.</p>
       <div class="card">
         <label class="config-label">Project URL</label>
         <input class="config-input" id="inputUrl" placeholder="https://abcdefg.supabase.co">
@@ -185,7 +181,7 @@
     </div>
   </div>
 
-  <!-- Screen 2: Pick identity -->
+  <!-- Screen 2: Identity -->
   <div class="screen" id="screenSetup">
     <div class="setup-screen">
       <h2>Who's here?</h2>
@@ -203,52 +199,28 @@
     </div>
   </div>
 
-  <!-- Screen 3: Main app -->
+  <!-- Screen 3: Main -->
   <div class="screen" id="screenMain">
     <div class="card">
-      <div class="card-label">Your lunch window</div>
-      <div class="time-row">
-        <span class="time-label">From</span>
-        <input type="time" id="startTime" step="300">
+      <div class="card-label">Drag to set your lunch window</div>
+      <div class="grid-wrap" id="gridWrap">
+        <div class="grid-header">
+          <span></span>
+          <span id="colYouLabel">You</span>
+          <span id="colPartnerLabel">Partner</span>
+        </div>
+        <div class="grid-body" id="gridBody"></div>
       </div>
-      <div class="time-row">
-        <span class="time-label">To</span>
-        <input type="time" id="endTime" step="300">
+      <div class="grid-legend">
+        <span><span class="legend-swatch" style="background:var(--green-mid)"></span>You</span>
+        <span><span class="legend-swatch" style="background:var(--coral-mid)"></span><span id="legendPartnerName2">Partner</span></span>
+        <span><span class="legend-swatch" style="background:var(--overlap-bg)"></span>Overlap</span>
       </div>
+      <div class="overlap-result" id="overlapResult" style="display:none"></div>
       <div class="btn-row">
         <button class="btn btn-primary" id="saveBtn" onclick="saveAvailability()" style="flex:1">Save</button>
         <button class="btn btn-outline" id="clearBtn" onclick="clearAvailability()" style="display:none;flex-shrink:0;">Clear</button>
       </div>
-    </div>
-
-    <div class="card">
-      <div class="card-label" id="partnerLabel">Partner's lunch window</div>
-      <div id="partnerContent">
-        <div class="partner-status">
-          <div class="emoji">🤷</div>
-          <div class="message">No lunch window set yet today.</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="card" id="overlapCard" style="display:none;">
-      <div class="card-label">Today's overlap</div>
-      <div class="timeline-wrap">
-        <div class="timeline-bar">
-          <div class="timeline-segment you" id="segYou"></div>
-          <div class="timeline-segment partner" id="segPartner"></div>
-          <div class="timeline-segment overlap" id="segOverlap"></div>
-        </div>
-        <div class="timeline-labels">
-          <span>10 AM</span><span>12 PM</span><span>2 PM</span><span>4 PM</span>
-        </div>
-        <div class="timeline-legend">
-          <span><span class="legend-dot you"></span>You</span>
-          <span><span class="legend-dot partner"></span><span id="legendPartnerName">Partner</span></span>
-          <span><span class="legend-dot overlap-dot"></span>Overlap</span>
-        </div>
-      </div>
-      <div class="overlap-result" id="overlapResult"></div>
     </div>
 
     <div class="card" id="nameCard" style="display:none;">
@@ -267,45 +239,303 @@
       &nbsp;·&nbsp;
       <button onclick="resetConfig()">⚙️ Reset connection</button>
     </div>
-
     <div class="conn-status">
       <span class="conn-dot" id="connDot"></span>
       <span id="connLabel">Connecting…</span>
     </div>
   </div>
 </div>
-
 <div class="toast" id="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-
 <script>
   // =============================================
-  //  No credentials in source code!
-  //  Stored in localStorage after first-time setup.
+  //  State
   // =============================================
-
-  let db = null;
-  let myId = null;
-  let myData = null;
-  let partnerData = null;
-  let namesCache = { person1: "Person 1", person2: "Person 2" };
-
-  const today = new Date();
-  const todayStr = today.toISOString().slice(0, 10);
+  var db = null;
+  var myId = null;
+  var myData = null;
+  var partnerData = null;
+  var namesCache = { person1: "Person 1", person2: "Person 2" };
+  var today = new Date();
+  var todayStr = today.toISOString().slice(0, 10);
   try { myId = localStorage.getItem("lunchsync_identity"); } catch(e) {}
-
   document.getElementById("todayDate").textContent = today.toLocaleDateString("en-US", {
     weekday: "long", month: "long", day: "numeric"
   });
 
-  // -- Screen navigation --
+  // =============================================
+  //  Time grid config
+  // =============================================
+  var GRID_START = 10 * 60;   // 10:00 AM
+  var GRID_END   = 15 * 60;   // 3:00 PM
+  var SLOT_MIN   = 15;
+  var slots = [];
+  for (var m = GRID_START; m < GRID_END; m += SLOT_MIN) {
+    slots.push(m);
+  }
+
+  var mySlots = new Set();
+  var isDragging = false;
+  var dragStart = -1;
+  var dragEnd = -1;
+  var dragMode = "add"; // "add" or "remove"
+
+  function minToStr(m) {
+    var h = Math.floor(m / 60);
+    var mm = m % 60;
+    return String(h).padStart(2, "0") + ":" + String(mm).padStart(2, "0");
+  }
+  function fmtTime(t) {
+    var parts = t.split(":"), h = parseInt(parts[0]), m = parseInt(parts[1]);
+    var ampm = h >= 12 ? "PM" : "AM";
+    var h12 = h % 12 || 12;
+    return m === 0 ? h12 + " " + ampm : h12 + ":" + String(m).padStart(2, "0") + " " + ampm;
+  }
+  function fmtMin(m) { return fmtTime(minToStr(m)); }
+
+  // =============================================
+  //  Build grid
+  // =============================================
+  function buildGrid() {
+    var body = document.getElementById("gridBody");
+    body.innerHTML = "";
+    for (var i = 0; i < slots.length; i++) {
+      var m = slots[i];
+      var row = document.createElement("div");
+      row.className = "grid-row";
+      if (m % 30 === 15) row.classList.add("half-hour");
+
+      // Time label (only on the hour and half-hour)
+      var label = document.createElement("div");
+      label.className = "grid-time";
+      if (m % 30 === 0) label.textContent = fmtMin(m);
+      row.appendChild(label);
+
+      // My cell
+      var myCell = document.createElement("div");
+      myCell.className = "grid-cell mine";
+      myCell.dataset.idx = i;
+      row.appendChild(myCell);
+
+      // Partner cell
+      var pCell = document.createElement("div");
+      pCell.className = "grid-cell partner";
+      pCell.dataset.idx = i;
+      row.appendChild(pCell);
+
+      body.appendChild(row);
+    }
+    attachGridEvents();
+  }
+
+  function renderGrid() {
+    var partnerSlots = getPartnerSlots();
+    var rows = document.getElementById("gridBody").children;
+    for (var i = 0; i < slots.length; i++) {
+      var myCell = rows[i].querySelector(".mine");
+      var pCell = rows[i].querySelector(".partner");
+
+      // My cell
+      myCell.classList.toggle("selected", mySlots.has(i));
+      myCell.classList.remove("selecting", "overlap");
+
+      // Partner cell
+      var pOn = partnerSlots.has(i);
+      pCell.classList.toggle("partner-on", pOn);
+      pCell.classList.remove("overlap");
+
+      // Overlap (show on both columns)
+      if (mySlots.has(i) && pOn) {
+        myCell.classList.add("overlap");
+        pCell.classList.add("overlap");
+      }
+    }
+    updateOverlapBanner(partnerSlots);
+    updateSaveButton();
+  }
+
+  function renderDragPreview() {
+    if (dragStart < 0) return;
+    var lo = Math.min(dragStart, dragEnd);
+    var hi = Math.max(dragStart, dragEnd);
+    var rows = document.getElementById("gridBody").children;
+    for (var i = 0; i < slots.length; i++) {
+      var myCell = rows[i].querySelector(".mine");
+      var inRange = (i >= lo && i <= hi);
+      if (dragMode === "add") {
+        myCell.classList.toggle("selecting", inRange && !mySlots.has(i));
+      } else {
+        myCell.classList.toggle("selecting", false);
+        // Dim cells being removed
+        if (inRange && mySlots.has(i)) {
+          myCell.style.opacity = "0.4";
+        } else {
+          myCell.style.opacity = "";
+        }
+      }
+    }
+  }
+
+  function clearDragStyles() {
+    var cells = document.querySelectorAll(".grid-cell.mine");
+    for (var i = 0; i < cells.length; i++) {
+      cells[i].classList.remove("selecting");
+      cells[i].style.opacity = "";
+    }
+  }
+
+  function commitDrag() {
+    if (dragStart < 0) return;
+    var lo = Math.min(dragStart, dragEnd);
+    var hi = Math.max(dragStart, dragEnd);
+    for (var i = lo; i <= hi; i++) {
+      if (dragMode === "add") mySlots.add(i);
+      else mySlots.delete(i);
+    }
+    dragStart = -1;
+    dragEnd = -1;
+    clearDragStyles();
+    renderGrid();
+  }
+
+  function getIdxFromEvent(e) {
+    var target;
+    if (e.touches && e.touches.length > 0) {
+      var touch = e.touches[0];
+      target = document.elementFromPoint(touch.clientX, touch.clientY);
+    } else {
+      target = e.target;
+    }
+    if (target && target.classList.contains("mine") && target.dataset.idx !== undefined) {
+      return parseInt(target.dataset.idx);
+    }
+    return -1;
+  }
+
+  function attachGridEvents() {
+    var wrap = document.getElementById("gridWrap");
+
+    wrap.addEventListener("mousedown", function(e) {
+      var idx = getIdxFromEvent(e);
+      if (idx < 0) return;
+      e.preventDefault();
+      isDragging = true;
+      dragStart = idx;
+      dragEnd = idx;
+      dragMode = mySlots.has(idx) ? "remove" : "add";
+      renderDragPreview();
+    });
+
+    wrap.addEventListener("mousemove", function(e) {
+      if (!isDragging) return;
+      var idx = getIdxFromEvent(e);
+      if (idx >= 0 && idx !== dragEnd) {
+        dragEnd = idx;
+        clearDragStyles();
+        renderDragPreview();
+      }
+    });
+
+    document.addEventListener("mouseup", function() {
+      if (!isDragging) return;
+      isDragging = false;
+      commitDrag();
+    });
+
+    // Touch
+    wrap.addEventListener("touchstart", function(e) {
+      var idx = getIdxFromEvent(e);
+      if (idx < 0) return;
+      e.preventDefault();
+      isDragging = true;
+      dragStart = idx;
+      dragEnd = idx;
+      dragMode = mySlots.has(idx) ? "remove" : "add";
+      renderDragPreview();
+    }, { passive: false });
+
+    wrap.addEventListener("touchmove", function(e) {
+      if (!isDragging) return;
+      e.preventDefault();
+      var idx = getIdxFromEvent(e);
+      if (idx >= 0 && idx !== dragEnd) {
+        dragEnd = idx;
+        clearDragStyles();
+        renderDragPreview();
+      }
+    }, { passive: false });
+
+    wrap.addEventListener("touchend", function() {
+      if (!isDragging) return;
+      isDragging = false;
+      commitDrag();
+    });
+  }
+
+  // =============================================
+  //  Slot ↔ time conversion
+  // =============================================
+  function slotsToRange() {
+    if (mySlots.size === 0) return null;
+    var idxs = Array.from(mySlots).sort(function(a, b) { return a - b; });
+    return { start: minToStr(slots[idxs[0]]), end: minToStr(slots[idxs[idxs.length - 1]] + SLOT_MIN) };
+  }
+
+  function rangeToSlots(start, end) {
+    var set = new Set();
+    var startMin = parseInt(start.split(":")[0]) * 60 + parseInt(start.split(":")[1]);
+    var endMin = parseInt(end.split(":")[0]) * 60 + parseInt(end.split(":")[1]);
+    for (var i = 0; i < slots.length; i++) {
+      if (slots[i] >= startMin && slots[i] < endMin) set.add(i);
+    }
+    return set;
+  }
+
+  function getPartnerSlots() {
+    if (partnerData && partnerData.start_time && partnerData.end_time) {
+      return rangeToSlots(partnerData.start_time, partnerData.end_time);
+    }
+    return new Set();
+  }
+
+  function updateSaveButton() {
+    document.getElementById("clearBtn").style.display = mySlots.size > 0 ? "block" : "none";
+    document.getElementById("saveBtn").textContent = (myData && myData.start_time) ? "Update" : "Save";
+  }
+
+  function updateOverlapBanner(partnerSlots) {
+    var result = document.getElementById("overlapResult");
+    if (mySlots.size === 0 || partnerSlots.size === 0) { result.style.display = "none"; return; }
+    var overlapIdxs = [];
+    mySlots.forEach(function(i) { if (partnerSlots.has(i)) overlapIdxs.push(i); });
+    if (overlapIdxs.length > 0) {
+      overlapIdxs.sort(function(a, b) { return a - b; });
+      var oStart = slots[overlapIdxs[0]];
+      var oEnd = slots[overlapIdxs[overlapIdxs.length - 1]] + SLOT_MIN;
+      result.className = "overlap-result has-overlap";
+      result.innerHTML = '<div class="ov-label">You can eat together</div><div class="ov-value">' +
+        fmtMin(oStart) + ' – ' + fmtMin(oEnd) + ' (' + (oEnd - oStart) + ' min)</div>';
+      result.style.display = "block";
+    } else {
+      result.className = "overlap-result no-overlap";
+      result.innerHTML = '<div class="ov-label">No overlap today</div><div class="ov-value">Different schedules 😕</div>';
+      result.style.display = "block";
+    }
+  }
+
+  // =============================================
+  //  Screen nav
+  // =============================================
   function showScreen(id) {
     document.querySelectorAll(".screen").forEach(function(s) { s.classList.remove("active"); });
     document.getElementById(id).classList.add("active");
+    if (id === "screenMain") { buildGrid(); renderGrid(); }
   }
 
-  // -- Config --
+  // =============================================
+  //  Config
+  // =============================================
   function getConfig() {
     try {
       var url = localStorage.getItem("lunchsync_url");
@@ -320,150 +550,107 @@
     var key = document.getElementById("inputKey").value.trim();
     var errEl = document.getElementById("configError");
     errEl.style.display = "none";
-
-    if (!url || !key) {
-      errEl.textContent = "Both fields are required.";
-      errEl.style.display = "block";
-      return;
-    }
-
+    if (!url || !key) { errEl.textContent = "Both fields are required."; errEl.style.display = "block"; return; }
     var btn = document.getElementById("configSaveBtn");
-    btn.textContent = "Connecting…";
-    btn.disabled = true;
-
+    btn.textContent = "Connecting…"; btn.disabled = true;
     try {
       var testClient = window.supabase.createClient(url, key);
       var result = await testClient.from("availability").select("person_id").limit(1);
-      if (result.error) {
-        errEl.textContent = "Query failed: " + result.error.message;
-        errEl.style.display = "block";
-        btn.textContent = "Connect";
-        btn.disabled = false;
-        return;
-      }
+      if (result.error) { errEl.textContent = "Query failed: " + result.error.message; errEl.style.display = "block"; btn.textContent = "Connect"; btn.disabled = false; return; }
       localStorage.setItem("lunchsync_url", url);
       localStorage.setItem("lunchsync_key", key);
       toast("Connected ✓");
       await connectAndStart();
-    } catch(e) {
-      errEl.textContent = "Could not connect. Check your URL and key.";
-      errEl.style.display = "block";
-      console.error("Config error:", e);
-      btn.textContent = "Connect";
-      btn.disabled = false;
-    }
+    } catch(e) { errEl.textContent = "Could not connect."; errEl.style.display = "block"; console.error(e); btn.textContent = "Connect"; btn.disabled = false; }
   }
 
   function resetConfig() {
-    if (confirm("Clear saved connection? You'll need to re-enter your Supabase URL and key.")) {
-      try {
-        localStorage.removeItem("lunchsync_url");
-        localStorage.removeItem("lunchsync_key");
-        localStorage.removeItem("lunchsync_identity");
-      } catch(e) {}
-      db = null;
-      myId = null;
-      showScreen("screenConfig");
+    if (confirm("Clear connection? You'll re-enter credentials.")) {
+      try { localStorage.removeItem("lunchsync_url"); localStorage.removeItem("lunchsync_key"); localStorage.removeItem("lunchsync_identity"); } catch(e) {}
+      db = null; myId = null; showScreen("screenConfig");
     }
   }
 
-  // -- Identity --
+  // =============================================
+  //  Identity
+  // =============================================
   function pickIdentity(id) {
     myId = id;
     try { localStorage.setItem("lunchsync_identity", id); } catch(e) {}
     showScreen("screenMain");
-    updatePartnerUI();
+    updateLabels();
     if (db) { loadAvailability().catch(function(e) { console.error(e); }); }
   }
-
   function switchIdentity() {
     try { localStorage.removeItem("lunchsync_identity"); } catch(e) {}
-    myId = null;
-    myData = null;
-    partnerData = null;
+    myId = null; myData = null; partnerData = null; mySlots = new Set();
     showScreen("screenSetup");
   }
 
-  // -- Names --
+  // =============================================
+  //  Names
+  // =============================================
   function partnerId() { return myId === "person1" ? "person2" : "person1"; }
   function partnerName() { return namesCache[partnerId()] || "Partner"; }
-
   function toggleNameEdit() {
     var card = document.getElementById("nameCard");
     card.style.display = card.style.display === "none" ? "block" : "none";
   }
-
+  function updateLabels() {
+    document.getElementById("colPartnerLabel").textContent = partnerName();
+    document.getElementById("legendPartnerName2").textContent = partnerName();
+  }
   async function loadNames() {
     try {
       if (!db) return;
       var result = await db.from("names").select("*");
-      if (result.data) {
-        result.data.forEach(function(row) { namesCache[row.person_id] = row.name; });
-      }
+      if (result.data) { result.data.forEach(function(row) { namesCache[row.person_id] = row.name; }); }
       document.getElementById("setupName1").textContent = namesCache.person1;
       document.getElementById("setupName2").textContent = namesCache.person2;
       document.getElementById("editName1").value = namesCache.person1;
       document.getElementById("editName2").value = namesCache.person2;
-      updatePartnerUI();
+      updateLabels();
     } catch(e) { console.error("loadNames:", e); }
   }
-
   async function saveNames() {
     var n1 = document.getElementById("editName1").value.trim() || "Person 1";
     var n2 = document.getElementById("editName2").value.trim() || "Person 2";
-    try {
-      if (db) {
-        await db.from("names").upsert([
-          { person_id: "person1", name: n1 },
-          { person_id: "person2", name: n2 }
-        ]);
-      }
-    } catch(e) { console.error("saveNames:", e); }
+    try { if (db) { await db.from("names").upsert([{person_id:"person1",name:n1},{person_id:"person2",name:n2}]); } } catch(e) { console.error(e); }
     namesCache = { person1: n1, person2: n2 };
-    toast("Names saved");
-    toggleNameEdit();
-    updatePartnerUI();
+    toast("Names saved"); toggleNameEdit(); updateLabels(); renderGrid();
   }
 
-  // -- Availability --
+  // =============================================
+  //  Availability (DB)
+  // =============================================
   async function loadAvailability() {
     try {
       if (!db) return;
       var result = await db.from("availability").select("*").eq("lunch_date", todayStr);
-      myData = null;
-      partnerData = null;
+      myData = null; partnerData = null;
       if (result.data) {
         result.data.forEach(function(row) {
           if (row.person_id === myId) myData = row;
           else partnerData = row;
         });
       }
-      if (myData) {
-        document.getElementById("startTime").value = myData.start_time || "";
-        document.getElementById("endTime").value = myData.end_time || "";
-        document.getElementById("clearBtn").style.display = "block";
-        document.getElementById("saveBtn").textContent = "Update";
-      } else {
-        document.getElementById("startTime").value = "";
-        document.getElementById("endTime").value = "";
-        document.getElementById("clearBtn").style.display = "none";
-        document.getElementById("saveBtn").textContent = "Save";
+      mySlots = new Set();
+      if (myData && myData.start_time && myData.end_time) {
+        mySlots = rangeToSlots(myData.start_time, myData.end_time);
       }
-      updatePartnerUI();
-      updateOverlap();
+      renderGrid();
     } catch(e) { console.error("loadAvailability:", e); }
   }
 
   async function saveAvailability() {
-    var start = document.getElementById("startTime").value;
-    var end = document.getElementById("endTime").value;
-    if (!start || !end) { toast("Pick both start and end times"); return; }
-    if (start >= end) { toast("End time must be after start"); return; }
+    var range = slotsToRange();
+    if (!range) { toast("Drag to select a time first"); return; }
     if (!db) { toast("Not connected"); return; }
     try {
       var result = await db.from("availability").upsert({
         person_id: myId, lunch_date: todayStr,
-        start_time: start, end_time: end, updated_at: new Date().toISOString()
+        start_time: range.start, end_time: range.end,
+        updated_at: new Date().toISOString()
       });
       if (result.error) { toast("Error — check console"); console.error(result.error); }
       else { toast("Saved ✓"); await loadAvailability(); }
@@ -471,144 +658,47 @@
   }
 
   async function clearAvailability() {
+    mySlots = new Set();
+    renderGrid();
     try {
       if (!db) return;
       await db.from("availability").delete().eq("person_id", myId).eq("lunch_date", todayStr);
-      document.getElementById("startTime").value = "";
-      document.getElementById("endTime").value = "";
-      toast("Cleared");
-      await loadAvailability();
-    } catch(e) { console.error("clearAvailability:", e); }
+      toast("Cleared"); await loadAvailability();
+    } catch(e) { console.error(e); }
   }
 
-  // -- UI --
-  function updatePartnerUI() {
-    var label = document.getElementById("partnerLabel");
-    var content = document.getElementById("partnerContent");
-    if (!myId) return;
-    var pName = partnerName();
-    label.textContent = pName + "'s lunch window";
-    if (partnerData && partnerData.start_time && partnerData.end_time) {
-      var updatedAgo = partnerData.updated_at ? timeAgo(new Date(partnerData.updated_at).getTime()) : "";
-      content.innerHTML =
-        '<div class="partner-time">' +
-        '<div class="range">' + fmtTime(partnerData.start_time) + ' – ' + fmtTime(partnerData.end_time) + '</div>' +
-        (updatedAgo ? '<div class="updated">Set ' + updatedAgo + '</div>' : '') +
-        '</div>';
-    } else {
-      content.innerHTML =
-        '<div class="partner-status">' +
-        '<div class="emoji">🤷</div>' +
-        '<div class="message">' + pName + ' hasn\'t set a lunch window today.</div>' +
-        '</div>';
-    }
-    document.getElementById("legendPartnerName").textContent = pName;
-  }
-
-  function updateOverlap() {
-    var card = document.getElementById("overlapCard");
-    var hasYou = myData && myData.start_time && myData.end_time;
-    var hasPartner = partnerData && partnerData.start_time && partnerData.end_time;
-    if (!hasYou && !hasPartner) { card.style.display = "none"; return; }
-    card.style.display = "block";
-
-    var TL_START = 600, TL_END = 960, TL_RANGE = 360;
-    function toMin(t) { var p = t.split(":"); return parseInt(p[0]) * 60 + parseInt(p[1]); }
-    function pct(min) { return Math.max(0, Math.min(100, ((min - TL_START) / TL_RANGE) * 100)); }
-
-    var segYou = document.getElementById("segYou");
-    var segPartner = document.getElementById("segPartner");
-    var segOverlap = document.getElementById("segOverlap");
-
-    if (hasYou) {
-      var s = pct(toMin(myData.start_time)), e = pct(toMin(myData.end_time));
-      segYou.style.left = s + "%"; segYou.style.width = (e - s) + "%";
-    } else { segYou.style.width = "0"; }
-
-    if (hasPartner) {
-      var s2 = pct(toMin(partnerData.start_time)), e2 = pct(toMin(partnerData.end_time));
-      segPartner.style.left = s2 + "%"; segPartner.style.width = (e2 - s2) + "%";
-    } else { segPartner.style.width = "0"; }
-
-    var result = document.getElementById("overlapResult");
-    if (hasYou && hasPartner) {
-      var oStart = Math.max(toMin(myData.start_time), toMin(partnerData.start_time));
-      var oEnd = Math.min(toMin(myData.end_time), toMin(partnerData.end_time));
-      if (oStart < oEnd) {
-        var os = pct(oStart), oe = pct(oEnd);
-        segOverlap.style.left = os + "%"; segOverlap.style.width = (oe - os) + "%";
-        var dur = oEnd - oStart;
-        result.className = "overlap-result has-overlap";
-        result.innerHTML = '<div class="label">You can eat together</div><div class="value">' +
-          fmtTime(minToTime(oStart)) + ' – ' + fmtTime(minToTime(oEnd)) + ' (' + dur + ' min)</div>';
-      } else {
-        segOverlap.style.width = "0";
-        result.className = "overlap-result no-overlap";
-        result.innerHTML = '<div class="label">No overlap today</div><div class="value">Different schedules 😕</div>';
-      }
-      result.style.display = "block";
-    } else {
-      segOverlap.style.width = "0";
-      result.style.display = "none";
-    }
-  }
-
-  // -- Helpers --
-  function fmtTime(t) {
-    var p = t.split(":"), h = parseInt(p[0]), m = parseInt(p[1]);
-    var ampm = h >= 12 ? "PM" : "AM";
-    var h12 = h % 12 || 12;
-    return m === 0 ? h12 + " " + ampm : h12 + ":" + String(m).padStart(2, "0") + " " + ampm;
-  }
-  function minToTime(min) {
-    return String(Math.floor(min / 60)).padStart(2, "0") + ":" + String(min % 60).padStart(2, "0");
-  }
-  function timeAgo(ts) {
-    var diff = Math.floor((Date.now() - ts) / 1000);
-    if (diff < 60) return "just now";
-    if (diff < 3600) return Math.floor(diff / 60) + " min ago";
-    if (diff < 86400) return Math.floor(diff / 3600) + "h ago";
-    return "";
-  }
+  // =============================================
+  //  Helpers
+  // =============================================
   function setConnected(v) {
     document.getElementById("connDot").classList.toggle("connected", v);
     document.getElementById("connLabel").textContent = v ? "Synced" : "Offline";
   }
   function toast(msg) {
     var el = document.getElementById("toast");
-    el.textContent = msg;
-    el.classList.add("show");
+    el.textContent = msg; el.classList.add("show");
     setTimeout(function() { el.classList.remove("show"); }, 2000);
   }
 
-  // -- Boot --
+  // =============================================
+  //  Boot
+  // =============================================
   async function connectAndStart() {
     var config = getConfig();
     if (!config) { showScreen("screenConfig"); return; }
-
     try {
       db = window.supabase.createClient(config.url, config.key);
       setConnected(true);
       await loadNames();
       db.channel("lunch-sync")
-        .on("postgres_changes", { event: "*", schema: "public", table: "availability" }, function() { loadAvailability(); })
-        .on("postgres_changes", { event: "*", schema: "public", table: "names" }, function() { loadNames(); })
+        .on("postgres_changes", {event:"*",schema:"public",table:"availability"}, function() { loadAvailability(); })
+        .on("postgres_changes", {event:"*",schema:"public",table:"names"}, function() { loadNames(); })
         .subscribe();
-    } catch(e) {
-      console.error("Connection error:", e);
-      setConnected(false);
-    }
-
-    if (myId) {
-      showScreen("screenMain");
-      try { await loadAvailability(); } catch(e) {}
-    } else {
-      showScreen("screenSetup");
-    }
+    } catch(e) { console.error("Connection error:", e); setConnected(false); }
+    if (myId) { showScreen("screenMain"); updateLabels(); try { await loadAvailability(); } catch(e) {} }
+    else { showScreen("screenSetup"); }
   }
-
   connectAndStart();
 </script>
-
 </body>
 </html>
