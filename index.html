@@ -61,7 +61,7 @@
     /* ===== Time Grid ===== */
     .grid-wrap { user-select: none; -webkit-user-select: none; touch-action: none; }
     .grid-header {
-      display: grid; grid-template-columns: 48px 1fr 1fr; gap: 0;
+      display: grid; grid-template-columns: 52px 1fr 1fr; gap: 0;
       margin-bottom: 4px; padding: 0 2px;
     }
     .grid-header span {
@@ -75,15 +75,15 @@
       position: relative; isolation: isolate;
     }
     .grid-row {
-      display: grid; grid-template-columns: 48px 1fr 1fr;
-      border-bottom: 1px solid #f0efec; min-height: 28px;
+      display: grid; grid-template-columns: 52px 1fr 1fr;
+      border-bottom: 1px solid #f0efec; min-height: 24px;
     }
     .grid-row:last-child { border-bottom: none; }
     .grid-row.half-hour { border-bottom-color: var(--border); }
     .grid-time {
-      font-size: 11px; color: var(--text-muted); padding: 2px 6px 0 2px;
+      font-size: 10px; color: var(--text-muted); padding: 2px 4px 0 0;
       display: flex; align-items: flex-start; justify-content: flex-end;
-      line-height: 1;
+      line-height: 1; white-space: nowrap;
     }
     .grid-cell {
       border-left: 1px solid #f0efec; position: relative;
@@ -279,7 +279,7 @@
   //  Time grid config
   // =============================================
   var GRID_START = 10 * 60;   // 10:00 AM
-  var GRID_END   = 15 * 60;   // 3:00 PM
+  var GRID_END   = 16 * 60;   // 4:00 PM
   var SLOT_MIN   = 15;
   var slots = [];
   for (var m = GRID_START; m < GRID_END; m += SLOT_MIN) {
@@ -304,6 +304,13 @@
     return m === 0 ? h12 + " " + ampm : h12 + ":" + String(m).padStart(2, "0") + " " + ampm;
   }
   function fmtMin(m) { return fmtTime(minToStr(m)); }
+  function fmtGrid(m) {
+    var h = Math.floor(m / 60), mm = m % 60;
+    var ampm = h >= 12 ? "p" : "a";
+    var h12 = h % 12 || 12;
+    if (mm === 0) return h12 + ampm;
+    return h12 + ":" + String(mm).padStart(2, "0");
+  }
 
   // =============================================
   //  Build grid
@@ -315,12 +322,12 @@
       var m = slots[i];
       var row = document.createElement("div");
       row.className = "grid-row";
-      if (m % 60 === 0) row.classList.add("half-hour");
+      if (m % 30 === 15) row.classList.add("half-hour");
 
-      // Time label (every 15 min)
+      // Time label (every 30 min)
       var label = document.createElement("div");
       label.className = "grid-time";
-      label.textContent = fmtMin(m);
+      if (m % 30 === 0) label.textContent = fmtGrid(m);
       row.appendChild(label);
 
       // My cell
