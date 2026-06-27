@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Lunch Sync</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍽️</text></svg>">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #F7F6F3;
+      --surface: #FFFFFF;
+      --text: #1A1A1A;
+      --text-muted: #7A7A7A;
+      --green: #3A7D5C;
+      --green-light: #E8F3ED;
+      --coral: #D96B4F;
+      --coral-light: #FDEEE9;
+      --border: #E8E6E1;
+      --overlap: #3A7D5C;
+      --radius: 14px;
+      --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100dvh;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 420px;
+      margin: 0 auto;
+      padding: 20px 16px 40px;
+    }
+
+    header {
+      text-align: center;
+      padding: 24px 0 20px;
+    }
+    header .icon { font-size: 36px; margin-bottom: 4px; }
+    header h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.3px; }
+    header .date { font-size: 14px; color: var(--text-muted); margin-top: 2px; }
+
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 20px;
+      margin-bottom: 14px;
+      border: 1px solid var(--border);
+    }
+
+    .card-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    /* Identity picker */
+    .identity-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .identity-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 20px 12px;
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      font-family: inherit;
+    }
+    .identity-btn:active { transform: scale(0.97); }
+    .identity-btn .emoji { font-size: 32px; }
+    .identity-btn .label { font-size: 15px; font-weight: 600; color: var(--text); }
+    .identity-btn.selected { border-color: var(--green); background: var(--green-light); }
+
+    /* Time inputs */
+    .time-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .time-row:last-of-type { margin-bottom: 0; }
+    .time-label {
+      font-size: 14px;
+      color: var(--text-muted);
+      width: 42px;
+      flex-shrink: 0;
+    }
+    input[type="time"] {
+      flex: 1;
+      font-size: 18px;
+      font-family: inherit;
+      font-weight: 600;
+      padding: 12px 14px;
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      background: var(--surface);
+      color: var(--text);
+      -webkit-appearance: none;
+      appearance: none;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    input[type="time"]:focus { border-color: var(--green); }
+
+    .btn-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .btn:active { transform: scale(0.98); }
+    .btn-primary { background: var(--green); color: white; }
+    .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+    .btn-outline {
+      background: none;
+      border: 2px solid var(--border);
+      color: var(--coral);
+      padding: 12px;
+    }
+
+    /* Partner card */
+    .partner-status { text-align: center; padding: 16px 0; }
+    .partner-status .emoji { font-size: 28px; margin-bottom: 6px; }
+    .partner-status .message { font-size: 14px; color: var(--text-muted); }
+    .partner-time { text-align: center; padding: 8px 0; }
+    .partner-time .range { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; }
+    .partner-time .updated { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+    /* Timeline */
+    .timeline-wrap { margin-top: 16px; }
+    .timeline-bar {
+      position: relative;
+      height: 10px;
+      background: #EDECEA;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+    .timeline-segment {
+      position: absolute;
+      top: 0;
+      height: 100%;
+      border-radius: 5px;
+      transition: left 0.3s, width 0.3s;
+    }
+    .timeline-segment.you { background: var(--green); opacity: 0.5; }
+    .timeline-segment.partner { background: var(--coral); opacity: 0.5; }
+    .timeline-segment.overlap { background: var(--overlap); opacity: 0.85; }
+    .timeline-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+    .timeline-legend {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .legend-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-right: 4px;
+      vertical-align: middle;
+    }
+    .legend-dot.you { background: var(--green); }
+    .legend-dot.partner { background: var(--coral); }
+    .legend-dot.overlap-dot { background: var(--overlap); }
+
+    .overlap-result {
+      text-align: center;
+      margin-top: 14px;
+      padding: 12px;
+      border-radius: 10px;
+    }
+    .overlap-result.has-overlap { background: var(--green-light); color: var(--green); }
+    .overlap-result.no-overlap { background: var(--coral-light); color: var(--coral); }
+    .overlap-result .label { font-size: 12px; font-weight: 500; }
+    .overlap-result .value { font-size: 18px; font-weight: 700; margin-top: 2px; }
+
+    .screen { display: none; }
+    .screen.active { display: block; }
+
+    .setup-screen { text-align: center; padding-top: 60px; }
+    .setup-screen h2 { font-size: 20px; margin-bottom: 6px; }
+    .setup-screen p { font-size: 14px; color: var(--text-muted); margin-bottom: 24px; }
+
+    .name-edit-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .name-input {
+      flex: 1;
+      font-size: 15px;
+      font-family: inherit;
+      font-weight: 600;
+      padding: 10px 12px;
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      background: var(--surface);
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .name-input:focus { border-color: var(--green); }
+    .btn-small {
+      padding: 10px 16px;
+      border: none;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      background: var(--green);
+      color: white;
+    }
+
+    .settings-link { text-align: center; margin-top: 10px; }
+    .settings-link button {
+      background: none;
+      border: none;
+      font-size: 13px;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-family: inherit;
+      text-decoration: underline;
+      text-decoration-style: dotted;
+      text-underline-offset: 3px;
+    }
+
+    .config-warning {
+      background: #FFF3CD;
+      border: 1px solid #FFE69C;
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-bottom: 14px;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    .config-warning code {
+      background: rgba(0,0,0,0.06);
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-size: 12px;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--text);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 500;
+      opacity: 0;
+      transition: all 0.25s ease;
+      pointer-events: none;
+      z-index: 100;
+      white-space: nowrap;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    .conn-status {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 16px;
+    }
+    .conn-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #ccc;
+    }
+    .conn-dot.connected { background: var(--green); }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <div class="icon">🍽️</div>
+    <h1>Lunch Sync</h1>
+    <div class="date" id="todayDate"></div>
+  </header>
+
+  <div class="config-warning" id="configWarning" style="display:none;">
+    ⚠️ Supabase isn't configured yet. Open <code>index.html</code> and replace the placeholder values in <code>SUPABASE_URL</code> and <code>SUPABASE_ANON_KEY</code>. See the README for the setup guide.
+  </div>
+
+  <!-- Screen: Pick identity -->
+  <div class="screen active" id="screenSetup">
+    <div class="setup-screen">
+      <h2>Who's here?</h2>
+      <p>Pick your spot — this device will remember.</p>
+      <div class="identity-grid">
+        <button class="identity-btn" onclick="pickIdentity('person1')">
+          <span class="emoji">🙋</span>
+          <span class="label" id="setupName1">Person 1</span>
+        </button>
+        <button class="identity-btn" onclick="pickIdentity('person2')">
+          <span class="emoji">🙋‍♀️</span>
+          <span class="label" id="setupName2">Person 2</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Screen: Main app -->
+  <div class="screen" id="screenMain">
+
+    <div class="card">
+      <div class="card-label">Your lunch window</div>
+      <div class="time-row">
+        <span class="time-label">From</span>
+        <input type="time" id="startTime" step="300">
+      </div>
+      <div class="time-row">
+        <span class="time-label">To</span>
+        <input type="time" id="endTime" step="300">
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" id="saveBtn" onclick="saveAvailability()" style="flex:1">Save</button>
+        <button class="btn btn-outline" id="clearBtn" onclick="clearAvailability()" style="display:none;flex-shrink:0;">Clear</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-label" id="partnerLabel">Partner's lunch window</div>
+      <div id="partnerContent">
+        <div class="partner-status">
+          <div class="emoji">🤷</div>
+          <div class="message">No lunch window set yet today.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" id="overlapCard" style="display:none;">
+      <div class="card-label">Today's overlap</div>
+      <div class="timeline-wrap">
+        <div class="timeline-bar">
+          <div class="timeline-segment you" id="segYou"></div>
+          <div class="timeline-segment partner" id="segPartner"></div>
+          <div class="timeline-segment overlap" id="segOverlap"></div>
+        </div>
+        <div class="timeline-labels">
+          <span>10 AM</span><span>12 PM</span><span>2 PM</span><span>4 PM</span>
+        </div>
+        <div class="timeline-legend">
+          <span><span class="legend-dot you"></span>You</span>
+          <span><span class="legend-dot partner"></span><span id="legendPartnerName">Partner</span></span>
+          <span><span class="legend-dot overlap-dot"></span>Overlap</span>
+        </div>
+      </div>
+      <div class="overlap-result" id="overlapResult"></div>
+    </div>
+
+    <div class="card" id="nameCard" style="display:none;">
+      <div class="card-label">Edit display names</div>
+      <div class="name-edit-row">
+        <input class="name-input" id="editName1" placeholder="Person 1 name">
+        <input class="name-input" id="editName2" placeholder="Person 2 name">
+        <button class="btn-small" onclick="saveNames()">Save</button>
+      </div>
+    </div>
+
+    <div class="settings-link">
+      <button onclick="toggleNameEdit()">✏️ Edit names</button>
+      &nbsp;·&nbsp;
+      <button onclick="switchIdentity()">🔄 Switch person</button>
+    </div>
+
+    <div class="conn-status">
+      <span class="conn-dot" id="connDot"></span>
+      <span id="connLabel">Connecting…</span>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- Supabase JS Client -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+
+<script>
+  // ============================================================
+  //  🔧 SUPABASE CONFIG — Replace these with your project values
+  // ============================================================
+  const SUPABASE_URL      = "https://ppvkbmldquibehrgofnw.supabase.co";        // e.g. https://abcdefg.supabase.co
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBwdmtibWxkcXVpYmVocmdvZm53Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI1NjM3NDEsImV4cCI6MjA5ODEzOTc0MX0.RD5-o_KutYJOVc3C8w_1zlwn3UeY8ia_BYSQNKe8DsI";   // e.g. eyJhbGciOiJIUzI1NiIs...
+  // ============================================================
+
+  const isConfigured = !SUPABASE_URL.startsWith("YOUR_");
+
+  let supabase = null;
+  let myId = localStorage.getItem("lunchsync_identity");
+  let myData = null;
+  let partnerData = null;
+  let namesCache = { person1: "Person 1", person2: "Person 2" };
+
+  const today = new Date();
+  const todayStr = today.toISOString().slice(0, 10);
+  document.getElementById("todayDate").textContent = today.toLocaleDateString("en-US", {
+    weekday: "long", month: "long", day: "numeric"
+  });
+
+  // ---- Init ----
+  async function init() {
+    if (!isConfigured) {
+      document.getElementById("configWarning").style.display = "block";
+    }
+
+    if (isConfigured) {
+      supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      setConnected(true);
+
+      // Load names
+      await loadNames();
+
+      // Subscribe to real-time changes
+      supabase
+        .channel("lunch-sync")
+        .on("postgres_changes", { event: "*", schema: "public", table: "availability" }, () => {
+          loadAvailability();
+        })
+        .on("postgres_changes", { event: "*", schema: "public", table: "names" }, () => {
+          loadNames();
+        })
+        .subscribe();
+    }
+
+    if (myId) {
+      showMainScreen();
+      if (isConfigured) await loadAvailability();
+    }
+  }
+
+  // ---- Identity ----
+  function pickIdentity(id) {
+    myId = id;
+    localStorage.setItem("lunchsync_identity", id);
+    showMainScreen();
+    if (isConfigured) loadAvailability();
+  }
+
+  function switchIdentity() {
+    localStorage.removeItem("lunchsync_identity");
+    myId = null;
+    myData = null;
+    partnerData = null;
+    document.getElementById("screenMain").classList.remove("active");
+    document.getElementById("screenSetup").classList.add("active");
+  }
+
+  function showMainScreen() {
+    document.getElementById("screenSetup").classList.remove("active");
+    document.getElementById("screenMain").classList.add("active");
+  }
+
+  // ---- Names ----
+  function partnerId() { return myId === "person1" ? "person2" : "person1"; }
+  function partnerName() { return namesCache[partnerId()]; }
+
+  async function loadNames() {
+    if (!supabase) return;
+    const { data } = await supabase.from("names").select("*");
+    if (data) {
+      data.forEach(row => { namesCache[row.person_id] = row.name; });
+    }
+    document.getElementById("setupName1").textContent = namesCache.person1;
+    document.getElementById("setupName2").textContent = namesCache.person2;
+    document.getElementById("editName1").value = namesCache.person1;
+    document.getElementById("editName2").value = namesCache.person2;
+    updatePartnerUI();
+  }
+
+  async function saveNames() {
+    const n1 = document.getElementById("editName1").value.trim() || "Person 1";
+    const n2 = document.getElementById("editName2").value.trim() || "Person 2";
+    if (supabase) {
+      await supabase.from("names").upsert([
+        { person_id: "person1", name: n1 },
+        { person_id: "person2", name: n2 }
+      ]);
+    }
+    namesCache = { person1: n1, person2: n2 };
+    toast("Names saved");
+    toggleNameEdit();
+    updatePartnerUI();
+  }
+
+  function toggleNameEdit() {
+    const card = document.getElementById("nameCard");
+    card.style.display = card.style.display === "none" ? "block" : "none";
+  }
+
+  // ---- Data ----
+  async function loadAvailability() {
+    if (!supabase) return;
+    const { data } = await supabase
+      .from("availability")
+      .select("*")
+      .eq("lunch_date", todayStr);
+
+    myData = null;
+    partnerData = null;
+
+    if (data) {
+      data.forEach(row => {
+        if (row.person_id === myId) myData = row;
+        else partnerData = row;
+      });
+    }
+
+    // Populate my fields
+    if (myData) {
+      document.getElementById("startTime").value = myData.start_time || "";
+      document.getElementById("endTime").value = myData.end_time || "";
+      document.getElementById("clearBtn").style.display = "block";
+      document.getElementById("saveBtn").textContent = "Update";
+    } else {
+      document.getElementById("startTime").value = "";
+      document.getElementById("endTime").value = "";
+      document.getElementById("clearBtn").style.display = "none";
+      document.getElementById("saveBtn").textContent = "Save";
+    }
+
+    updatePartnerUI();
+    updateOverlap();
+  }
+
+  async function saveAvailability() {
+    const start = document.getElementById("startTime").value;
+    const end = document.getElementById("endTime").value;
+    if (!start || !end) { toast("Pick both start and end times"); return; }
+    if (start >= end) { toast("End time must be after start"); return; }
+    if (!supabase) { toast("Supabase not configured yet"); return; }
+
+    const { error } = await supabase.from("availability").upsert({
+      person_id: myId,
+      lunch_date: todayStr,
+      start_time: start,
+      end_time: end,
+      updated_at: new Date().toISOString()
+    });
+
+    if (error) {
+      toast("Error saving — check console");
+      console.error(error);
+    } else {
+      toast("Saved ✓");
+      await loadAvailability();
+    }
+  }
+
+  async function clearAvailability() {
+    if (!supabase) return;
+    await supabase
+      .from("availability")
+      .delete()
+      .eq("person_id", myId)
+      .eq("lunch_date", todayStr);
+    document.getElementById("startTime").value = "";
+    document.getElementById("endTime").value = "";
+    toast("Cleared");
+    await loadAvailability();
+  }
+
+  // ---- Partner UI ----
+  function updatePartnerUI() {
+    const label = document.getElementById("partnerLabel");
+    const content = document.getElementById("partnerContent");
+    if (!myId) return;
+    const pName = partnerName();
+    label.textContent = pName + "'s lunch window";
+
+    if (partnerData && partnerData.start_time && partnerData.end_time) {
+      const updatedAgo = partnerData.updated_at ? timeAgo(new Date(partnerData.updated_at).getTime()) : "";
+      content.innerHTML = `
+        <div class="partner-time">
+          <div class="range">${fmtTime(partnerData.start_time)} – ${fmtTime(partnerData.end_time)}</div>
+          ${updatedAgo ? `<div class="updated">Set ${updatedAgo}</div>` : ""}
+        </div>`;
+    } else {
+      content.innerHTML = `
+        <div class="partner-status">
+          <div class="emoji">🤷</div>
+          <div class="message">${pName} hasn't set a lunch window today.</div>
+        </div>`;
+    }
+    document.getElementById("legendPartnerName").textContent = pName;
+  }
+
+  // ---- Overlap ----
+  function updateOverlap() {
+    const card = document.getElementById("overlapCard");
+    const hasYou = myData && myData.start_time && myData.end_time;
+    const hasPartner = partnerData && partnerData.start_time && partnerData.end_time;
+
+    if (!hasYou && !hasPartner) { card.style.display = "none"; return; }
+    card.style.display = "block";
+
+    const TL_START = 10 * 60, TL_END = 16 * 60, TL_RANGE = TL_END - TL_START;
+    function toMin(t) { const [h, m] = t.split(":").map(Number); return h * 60 + m; }
+    function pct(min) { return Math.max(0, Math.min(100, ((min - TL_START) / TL_RANGE) * 100)); }
+
+    const segYou = document.getElementById("segYou");
+    const segPartner = document.getElementById("segPartner");
+    const segOverlap = document.getElementById("segOverlap");
+
+    if (hasYou) {
+      const s = pct(toMin(myData.start_time)), e = pct(toMin(myData.end_time));
+      segYou.style.left = s + "%"; segYou.style.width = (e - s) + "%";
+    } else { segYou.style.width = "0"; }
+
+    if (hasPartner) {
+      const s = pct(toMin(partnerData.start_time)), e = pct(toMin(partnerData.end_time));
+      segPartner.style.left = s + "%"; segPartner.style.width = (e - s) + "%";
+    } else { segPartner.style.width = "0"; }
+
+    const result = document.getElementById("overlapResult");
+    if (hasYou && hasPartner) {
+      const oStart = Math.max(toMin(myData.start_time), toMin(partnerData.start_time));
+      const oEnd = Math.min(toMin(myData.end_time), toMin(partnerData.end_time));
+      if (oStart < oEnd) {
+        const s = pct(oStart), e = pct(oEnd);
+        segOverlap.style.left = s + "%"; segOverlap.style.width = (e - s) + "%";
+        const dur = oEnd - oStart;
+        result.className = "overlap-result has-overlap";
+        result.innerHTML = `<div class="label">You can eat together</div><div class="value">${fmtTime(minToTime(oStart))} – ${fmtTime(minToTime(oEnd))} (${dur} min)</div>`;
+      } else {
+        segOverlap.style.width = "0";
+        result.className = "overlap-result no-overlap";
+        result.innerHTML = `<div class="label">No overlap today</div><div class="value">Different schedules 😕</div>`;
+      }
+      result.style.display = "block";
+    } else {
+      segOverlap.style.width = "0";
+      result.style.display = "none";
+    }
+  }
+
+  // ---- Helpers ----
+  function fmtTime(t) {
+    const [h, m] = t.split(":").map(Number);
+    const ampm = h >= 12 ? "PM" : "AM";
+    const h12 = h % 12 || 12;
+    return m === 0 ? `${h12} ${ampm}` : `${h12}:${String(m).padStart(2, "0")} ${ampm}`;
+  }
+
+  function minToTime(min) {
+    return `${String(Math.floor(min / 60)).padStart(2, "0")}:${String(min % 60).padStart(2, "0")}`;
+  }
+
+  function timeAgo(ts) {
+    const diff = Math.floor((Date.now() - ts) / 1000);
+    if (diff < 60) return "just now";
+    if (diff < 3600) return Math.floor(diff / 60) + " min ago";
+    if (diff < 86400) return Math.floor(diff / 3600) + "h ago";
+    return "";
+  }
+
+  function setConnected(v) {
+    document.getElementById("connDot").classList.toggle("connected", v);
+    document.getElementById("connLabel").textContent = v ? "Synced" : "Offline";
+  }
+
+  function toast(msg) {
+    const el = document.getElementById("toast");
+    el.textContent = msg;
+    el.classList.add("show");
+    setTimeout(() => el.classList.remove("show"), 2000);
+  }
+
+  init();
+</script>
+
+</body>
+</html>
