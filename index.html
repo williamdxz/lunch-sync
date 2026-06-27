@@ -23,7 +23,11 @@
     header { text-align: center; padding: 24px 0 20px; }
     header .icon { font-size: 36px; margin-bottom: 4px; }
     header h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.3px; }
-    header .date { font-size: 14px; color: var(--text-muted); margin-top: 2px; }
+    header .date {
+      font-size: 14px; color: var(--green); margin-top: 6px;
+      font-weight: 600; background: var(--green-light); display: inline-block;
+      padding: 4px 14px; border-radius: 20px;
+    }
 
     .card {
       background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow);
@@ -68,6 +72,7 @@
 
     .grid-body {
       border: 1px solid var(--border); border-radius: 10px; overflow: hidden;
+      position: relative; isolation: isolate;
     }
     .grid-row {
       display: grid; grid-template-columns: 48px 1fr 1fr;
@@ -82,11 +87,11 @@
     }
     .grid-cell {
       border-left: 1px solid #f0efec; position: relative;
-      transition: background-color 0.08s;
+      transition: background-color 0.08s; overflow: hidden;
     }
     .grid-cell.mine { cursor: pointer; }
     .grid-cell.mine:hover { background: #f5f5f2; }
-    .grid-cell.mine.selected { background: var(--green-mid); }
+    .grid-cell.mine.selected { background: var(--green-mid); border-left-color: var(--green-mid); }
     .grid-cell.mine.selecting { background: var(--green-light); }
     .grid-cell.partner-on { background: var(--coral-mid); }
     .grid-cell.overlap { background: var(--overlap-bg) !important; }
@@ -115,7 +120,8 @@
     .setup-screen h2 { font-size: 20px; margin-bottom: 6px; }
     .setup-screen p { font-size: 14px; color: var(--text-muted); margin-bottom: 24px; }
 
-    .name-edit-row { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
+    .name-edit-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+    .name-inputs { display: flex; gap: 8px; width: 100%; }
     .name-input {
       flex: 1; font-size: 15px; font-family: inherit; font-weight: 600;
       padding: 10px 12px; border: 2px solid var(--border); border-radius: 10px;
@@ -219,16 +225,19 @@
       <div class="overlap-result" id="overlapResult" style="display:none"></div>
       <div class="btn-row">
         <button class="btn btn-primary" id="saveBtn" onclick="saveAvailability()" style="flex:1">Save</button>
-        <button class="btn btn-outline" id="clearBtn" onclick="clearAvailability()" style="display:none;flex-shrink:0;">Clear</button>
       </div>
     </div>
+
+    <button class="btn btn-outline" id="clearBtn" onclick="clearAvailability()" style="width:100%;margin-bottom:14px;">🗑️ Clear my schedule</button>
 
     <div class="card" id="nameCard" style="display:none;">
       <div class="card-label">Edit display names</div>
       <div class="name-edit-row">
-        <input class="name-input" id="editName1" placeholder="Person 1 name">
-        <input class="name-input" id="editName2" placeholder="Person 2 name">
-        <button class="btn-small" onclick="saveNames()">Save</button>
+        <div class="name-inputs">
+          <input class="name-input" id="editName1" placeholder="Person 1 name">
+          <input class="name-input" id="editName2" placeholder="Person 2 name">
+        </div>
+        <button class="btn-small" onclick="saveNames()" style="width:100%;padding:12px;">Save names</button>
       </div>
     </div>
 
