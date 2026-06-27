@@ -32,16 +32,9 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    .container {
-      max-width: 420px;
-      margin: 0 auto;
-      padding: 20px 16px 40px;
-    }
+    .container { max-width: 420px; margin: 0 auto; padding: 20px 16px 40px; }
 
-    header {
-      text-align: center;
-      padding: 24px 0 20px;
-    }
+    header { text-align: center; padding: 24px 0 20px; }
     header .icon { font-size: 36px; margin-bottom: 4px; }
     header h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.3px; }
     header .date { font-size: 14px; color: var(--text-muted); margin-top: 2px; }
@@ -54,100 +47,42 @@
       margin-bottom: 14px;
       border: 1px solid var(--border);
     }
-
     .card-label {
-      font-size: 11px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      color: var(--text-muted);
-      margin-bottom: 12px;
+      font-size: 11px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.8px; color: var(--text-muted); margin-bottom: 12px;
     }
 
-    /* Identity picker */
-    .identity-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
+    .identity-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     .identity-btn {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-      padding: 20px 12px;
-      border: 2px solid var(--border);
-      border-radius: var(--radius);
-      background: var(--surface);
-      cursor: pointer;
-      transition: all 0.15s ease;
-      font-family: inherit;
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      padding: 20px 12px; border: 2px solid var(--border); border-radius: var(--radius);
+      background: var(--surface); cursor: pointer; transition: all 0.15s ease; font-family: inherit;
     }
     .identity-btn:active { transform: scale(0.97); }
     .identity-btn .emoji { font-size: 32px; }
     .identity-btn .label { font-size: 15px; font-weight: 600; color: var(--text); }
-    .identity-btn.selected { border-color: var(--green); background: var(--green-light); }
 
-    /* Time inputs */
-    .time-row {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 14px;
-    }
+    .time-row { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
     .time-row:last-of-type { margin-bottom: 0; }
-    .time-label {
-      font-size: 14px;
-      color: var(--text-muted);
-      width: 42px;
-      flex-shrink: 0;
-    }
+    .time-label { font-size: 14px; color: var(--text-muted); width: 42px; flex-shrink: 0; }
     input[type="time"] {
-      flex: 1;
-      font-size: 18px;
-      font-family: inherit;
-      font-weight: 600;
-      padding: 12px 14px;
-      border: 2px solid var(--border);
-      border-radius: 10px;
-      background: var(--surface);
-      color: var(--text);
-      -webkit-appearance: none;
-      appearance: none;
-      outline: none;
-      transition: border-color 0.15s;
+      flex: 1; font-size: 18px; font-family: inherit; font-weight: 600;
+      padding: 12px 14px; border: 2px solid var(--border); border-radius: 10px;
+      background: var(--surface); color: var(--text);
+      -webkit-appearance: none; appearance: none; outline: none; transition: border-color 0.15s;
     }
     input[type="time"]:focus { border-color: var(--green); }
 
-    .btn-row {
-      display: flex;
-      gap: 10px;
-      margin-top: 16px;
-    }
-
+    .btn-row { display: flex; gap: 10px; margin-top: 16px; }
     .btn {
-      display: block;
-      width: 100%;
-      padding: 14px;
-      border: none;
-      border-radius: 10px;
-      font-size: 15px;
-      font-weight: 600;
-      font-family: inherit;
-      cursor: pointer;
-      transition: all 0.15s ease;
+      display: block; width: 100%; padding: 14px; border: none; border-radius: 10px;
+      font-size: 15px; font-weight: 600; font-family: inherit; cursor: pointer; transition: all 0.15s ease;
     }
     .btn:active { transform: scale(0.98); }
     .btn-primary { background: var(--green); color: white; }
     .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
-    .btn-outline {
-      background: none;
-      border: 2px solid var(--border);
-      color: var(--coral);
-      padding: 12px;
-    }
+    .btn-outline { background: none; border: 2px solid var(--border); color: var(--coral); padding: 12px; }
 
-    /* Partner card */
     .partner-status { text-align: center; padding: 16px 0; }
     .partner-status .emoji { font-size: 28px; margin-bottom: 6px; }
     .partner-status .message { font-size: 14px; color: var(--text-muted); }
@@ -155,58 +90,20 @@
     .partner-time .range { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; }
     .partner-time .updated { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
 
-    /* Timeline */
     .timeline-wrap { margin-top: 16px; }
-    .timeline-bar {
-      position: relative;
-      height: 10px;
-      background: #EDECEA;
-      border-radius: 5px;
-      overflow: hidden;
-    }
-    .timeline-segment {
-      position: absolute;
-      top: 0;
-      height: 100%;
-      border-radius: 5px;
-      transition: left 0.3s, width 0.3s;
-    }
+    .timeline-bar { position: relative; height: 10px; background: #EDECEA; border-radius: 5px; overflow: hidden; }
+    .timeline-segment { position: absolute; top: 0; height: 100%; border-radius: 5px; transition: left 0.3s, width 0.3s; }
     .timeline-segment.you { background: var(--green); opacity: 0.5; }
     .timeline-segment.partner { background: var(--coral); opacity: 0.5; }
     .timeline-segment.overlap { background: var(--overlap); opacity: 0.85; }
-    .timeline-labels {
-      display: flex;
-      justify-content: space-between;
-      font-size: 11px;
-      color: var(--text-muted);
-      margin-top: 4px;
-    }
-    .timeline-legend {
-      display: flex;
-      justify-content: center;
-      gap: 16px;
-      margin-top: 10px;
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-    .legend-dot {
-      display: inline-block;
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      margin-right: 4px;
-      vertical-align: middle;
-    }
+    .timeline-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+    .timeline-legend { display: flex; justify-content: center; gap: 16px; margin-top: 10px; font-size: 12px; color: var(--text-muted); }
+    .legend-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 4px; vertical-align: middle; }
     .legend-dot.you { background: var(--green); }
     .legend-dot.partner { background: var(--coral); }
     .legend-dot.overlap-dot { background: var(--overlap); }
 
-    .overlap-result {
-      text-align: center;
-      margin-top: 14px;
-      padding: 12px;
-      border-radius: 10px;
-    }
+    .overlap-result { text-align: center; margin-top: 14px; padding: 12px; border-radius: 10px; }
     .overlap-result.has-overlap { background: var(--green-light); color: var(--green); }
     .overlap-result.no-overlap { background: var(--coral-light); color: var(--coral); }
     .overlap-result .label { font-size: 12px; font-weight: 500; }
@@ -215,106 +112,52 @@
     .screen { display: none; }
     .screen.active { display: block; }
 
-    .setup-screen { text-align: center; padding-top: 60px; }
+    .setup-screen { text-align: center; padding-top: 40px; }
     .setup-screen h2 { font-size: 20px; margin-bottom: 6px; }
     .setup-screen p { font-size: 14px; color: var(--text-muted); margin-bottom: 24px; }
 
-    .name-edit-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 16px;
-    }
+    .name-edit-row { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
     .name-input {
-      flex: 1;
-      font-size: 15px;
-      font-family: inherit;
-      font-weight: 600;
-      padding: 10px 12px;
-      border: 2px solid var(--border);
-      border-radius: 10px;
-      background: var(--surface);
-      color: var(--text);
-      outline: none;
-      transition: border-color 0.15s;
+      flex: 1; font-size: 15px; font-family: inherit; font-weight: 600;
+      padding: 10px 12px; border: 2px solid var(--border); border-radius: 10px;
+      background: var(--surface); color: var(--text); outline: none; transition: border-color 0.15s;
     }
     .name-input:focus { border-color: var(--green); }
     .btn-small {
-      padding: 10px 16px;
-      border: none;
-      border-radius: 10px;
-      font-size: 13px;
-      font-weight: 600;
-      font-family: inherit;
-      cursor: pointer;
-      background: var(--green);
-      color: white;
+      padding: 10px 16px; border: none; border-radius: 10px; font-size: 13px;
+      font-weight: 600; font-family: inherit; cursor: pointer; background: var(--green); color: white;
     }
 
     .settings-link { text-align: center; margin-top: 10px; }
     .settings-link button {
-      background: none;
-      border: none;
-      font-size: 13px;
-      color: var(--text-muted);
-      cursor: pointer;
-      font-family: inherit;
-      text-decoration: underline;
-      text-decoration-style: dotted;
-      text-underline-offset: 3px;
-    }
-
-    .config-warning {
-      background: #FFF3CD;
-      border: 1px solid #FFE69C;
-      border-radius: var(--radius);
-      padding: 16px;
-      margin-bottom: 14px;
-      font-size: 13px;
-      line-height: 1.6;
-    }
-    .config-warning code {
-      background: rgba(0,0,0,0.06);
-      padding: 1px 5px;
-      border-radius: 4px;
-      font-size: 12px;
+      background: none; border: none; font-size: 13px; color: var(--text-muted);
+      cursor: pointer; font-family: inherit; text-decoration: underline;
+      text-decoration-style: dotted; text-underline-offset: 3px;
     }
 
     .toast {
-      position: fixed;
-      bottom: 30px;
-      left: 50%;
+      position: fixed; bottom: 30px; left: 50%;
       transform: translateX(-50%) translateY(20px);
-      background: var(--text);
-      color: white;
-      padding: 10px 20px;
-      border-radius: 20px;
-      font-size: 14px;
-      font-weight: 500;
-      opacity: 0;
-      transition: all 0.25s ease;
-      pointer-events: none;
-      z-index: 100;
-      white-space: nowrap;
+      background: var(--text); color: white; padding: 10px 20px; border-radius: 20px;
+      font-size: 14px; font-weight: 500; opacity: 0; transition: all 0.25s ease;
+      pointer-events: none; z-index: 100; white-space: nowrap;
     }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-    .conn-status {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 5px;
-      font-size: 11px;
-      color: var(--text-muted);
-      margin-top: 16px;
-    }
-    .conn-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: #ccc;
-    }
+    .conn-status { display: flex; align-items: center; justify-content: center; gap: 5px; font-size: 11px; color: var(--text-muted); margin-top: 16px; }
+    .conn-dot { width: 6px; height: 6px; border-radius: 50%; background: #ccc; }
     .conn-dot.connected { background: var(--green); }
+
+    .config-input {
+      width: 100%; font-size: 13px; font-family: 'SF Mono', 'Menlo', 'Consolas', monospace;
+      padding: 12px; border: 2px solid var(--border); border-radius: 10px;
+      background: var(--surface); color: var(--text); outline: none;
+      transition: border-color 0.15s; margin-bottom: 12px;
+    }
+    .config-input:focus { border-color: var(--green); }
+    .config-input::placeholder { font-family: inherit; color: #bbb; }
+    .config-label { font-size: 13px; font-weight: 600; margin-bottom: 6px; display: block; }
+    .error-msg { color: var(--coral); font-size: 13px; margin-bottom: 12px; display: none; }
   </style>
 </head>
 <body>
@@ -326,12 +169,24 @@
     <div class="date" id="todayDate"></div>
   </header>
 
-  <div class="config-warning" id="configWarning" style="display:none;">
-    ⚠️ Supabase isn't configured yet. Open <code>index.html</code> and replace the placeholder values in <code>SUPABASE_URL</code> and <code>SUPABASE_ANON_KEY</code>. See the README for the setup guide.
+  <!-- Screen 1: Supabase config (first time only per device) -->
+  <div class="screen active" id="screenConfig">
+    <div class="setup-screen" style="padding-top:20px; text-align:left;">
+      <h2 style="text-align:center;">First-time setup</h2>
+      <p style="text-align:center;">Paste your Supabase credentials below. You only need to do this once per device.</p>
+      <div class="card">
+        <label class="config-label">Project URL</label>
+        <input class="config-input" id="inputUrl" placeholder="https://abcdefg.supabase.co">
+        <label class="config-label">Anon / Public Key</label>
+        <input class="config-input" id="inputKey" placeholder="eyJhbGciOiJIUzI1NiIs...">
+        <div class="error-msg" id="configError"></div>
+        <button class="btn btn-primary" id="configSaveBtn" onclick="saveConfig()">Connect</button>
+      </div>
+    </div>
   </div>
 
-  <!-- Screen: Pick identity -->
-  <div class="screen active" id="screenSetup">
+  <!-- Screen 2: Pick identity -->
+  <div class="screen" id="screenSetup">
     <div class="setup-screen">
       <h2>Who's here?</h2>
       <p>Pick your spot — this device will remember.</p>
@@ -348,9 +203,8 @@
     </div>
   </div>
 
-  <!-- Screen: Main app -->
+  <!-- Screen 3: Main app -->
   <div class="screen" id="screenMain">
-
     <div class="card">
       <div class="card-label">Your lunch window</div>
       <div class="time-row">
@@ -410,6 +264,8 @@
       <button onclick="toggleNameEdit()">✏️ Edit names</button>
       &nbsp;·&nbsp;
       <button onclick="switchIdentity()">🔄 Switch person</button>
+      &nbsp;·&nbsp;
+      <button onclick="resetConfig()">⚙️ Reset connection</button>
     </div>
 
     <div class="conn-status">
@@ -421,259 +277,274 @@
 
 <div class="toast" id="toast"></div>
 
-<!-- Supabase JS Client -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 
 <script>
-  // ============================================================
-  //  🔧 SUPABASE CONFIG — Replace these with your project values
-  // ============================================================
-  const SUPABASE_URL      = "https://ppvkbmldquibehrgofnw.supabase.co";        // e.g. https://abcdefg.supabase.co
-  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBwdmtibWxkcXVpYmVocmdvZm53Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI1NjM3NDEsImV4cCI6MjA5ODEzOTc0MX0.RD5-o_KutYJOVc3C8w_1zlwn3UeY8ia_BYSQNKe8DsI";   // e.g. eyJhbGciOiJIUzI1NiIs...
-  // ============================================================
-
-  const isConfigured = !SUPABASE_URL.startsWith("YOUR_");
+  // =============================================
+  //  No credentials in source code!
+  //  Stored in localStorage after first-time setup.
+  // =============================================
 
   let supabase = null;
-  let myId = localStorage.getItem("lunchsync_identity");
+  let myId = null;
   let myData = null;
   let partnerData = null;
   let namesCache = { person1: "Person 1", person2: "Person 2" };
 
   const today = new Date();
   const todayStr = today.toISOString().slice(0, 10);
+  try { myId = localStorage.getItem("lunchsync_identity"); } catch(e) {}
+
   document.getElementById("todayDate").textContent = today.toLocaleDateString("en-US", {
     weekday: "long", month: "long", day: "numeric"
   });
 
-  // ---- Init ----
-  async function init() {
-    if (!isConfigured) {
-      document.getElementById("configWarning").style.display = "block";
+  // -- Screen navigation --
+  function showScreen(id) {
+    document.querySelectorAll(".screen").forEach(function(s) { s.classList.remove("active"); });
+    document.getElementById(id).classList.add("active");
+  }
+
+  // -- Config --
+  function getConfig() {
+    try {
+      var url = localStorage.getItem("lunchsync_url");
+      var key = localStorage.getItem("lunchsync_key");
+      if (url && key) return { url: url, key: key };
+    } catch(e) {}
+    return null;
+  }
+
+  async function saveConfig() {
+    var url = document.getElementById("inputUrl").value.trim().replace(/\/+$/, "");
+    var key = document.getElementById("inputKey").value.trim();
+    var errEl = document.getElementById("configError");
+    errEl.style.display = "none";
+
+    if (!url || !key) {
+      errEl.textContent = "Both fields are required.";
+      errEl.style.display = "block";
+      return;
     }
 
-    if (isConfigured) {
-      supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-      setConnected(true);
+    var btn = document.getElementById("configSaveBtn");
+    btn.textContent = "Connecting…";
+    btn.disabled = true;
 
-      // Load names
-      await loadNames();
-
-      // Subscribe to real-time changes
-      supabase
-        .channel("lunch-sync")
-        .on("postgres_changes", { event: "*", schema: "public", table: "availability" }, () => {
-          loadAvailability();
-        })
-        .on("postgres_changes", { event: "*", schema: "public", table: "names" }, () => {
-          loadNames();
-        })
-        .subscribe();
-    }
-
-    if (myId) {
-      showMainScreen();
-      if (isConfigured) await loadAvailability();
+    try {
+      var testClient = window.supabase.createClient(url, key);
+      var result = await testClient.from("availability").select("person_id").limit(1);
+      if (result.error) {
+        errEl.textContent = "Query failed: " + result.error.message;
+        errEl.style.display = "block";
+        btn.textContent = "Connect";
+        btn.disabled = false;
+        return;
+      }
+      localStorage.setItem("lunchsync_url", url);
+      localStorage.setItem("lunchsync_key", key);
+      toast("Connected ✓");
+      await connectAndStart();
+    } catch(e) {
+      errEl.textContent = "Could not connect. Check your URL and key.";
+      errEl.style.display = "block";
+      console.error("Config error:", e);
+      btn.textContent = "Connect";
+      btn.disabled = false;
     }
   }
 
-  // ---- Identity ----
+  function resetConfig() {
+    if (confirm("Clear saved connection? You'll need to re-enter your Supabase URL and key.")) {
+      try {
+        localStorage.removeItem("lunchsync_url");
+        localStorage.removeItem("lunchsync_key");
+        localStorage.removeItem("lunchsync_identity");
+      } catch(e) {}
+      supabase = null;
+      myId = null;
+      showScreen("screenConfig");
+    }
+  }
+
+  // -- Identity --
   function pickIdentity(id) {
     myId = id;
-    localStorage.setItem("lunchsync_identity", id);
-    showMainScreen();
-    if (isConfigured) loadAvailability();
+    try { localStorage.setItem("lunchsync_identity", id); } catch(e) {}
+    showScreen("screenMain");
+    updatePartnerUI();
+    if (supabase) { loadAvailability().catch(function(e) { console.error(e); }); }
   }
 
   function switchIdentity() {
-    localStorage.removeItem("lunchsync_identity");
+    try { localStorage.removeItem("lunchsync_identity"); } catch(e) {}
     myId = null;
     myData = null;
     partnerData = null;
-    document.getElementById("screenMain").classList.remove("active");
-    document.getElementById("screenSetup").classList.add("active");
+    showScreen("screenSetup");
   }
 
-  function showMainScreen() {
-    document.getElementById("screenSetup").classList.remove("active");
-    document.getElementById("screenMain").classList.add("active");
-  }
-
-  // ---- Names ----
+  // -- Names --
   function partnerId() { return myId === "person1" ? "person2" : "person1"; }
-  function partnerName() { return namesCache[partnerId()]; }
+  function partnerName() { return namesCache[partnerId()] || "Partner"; }
+
+  function toggleNameEdit() {
+    var card = document.getElementById("nameCard");
+    card.style.display = card.style.display === "none" ? "block" : "none";
+  }
 
   async function loadNames() {
-    if (!supabase) return;
-    const { data } = await supabase.from("names").select("*");
-    if (data) {
-      data.forEach(row => { namesCache[row.person_id] = row.name; });
-    }
-    document.getElementById("setupName1").textContent = namesCache.person1;
-    document.getElementById("setupName2").textContent = namesCache.person2;
-    document.getElementById("editName1").value = namesCache.person1;
-    document.getElementById("editName2").value = namesCache.person2;
-    updatePartnerUI();
+    try {
+      if (!supabase) return;
+      var result = await supabase.from("names").select("*");
+      if (result.data) {
+        result.data.forEach(function(row) { namesCache[row.person_id] = row.name; });
+      }
+      document.getElementById("setupName1").textContent = namesCache.person1;
+      document.getElementById("setupName2").textContent = namesCache.person2;
+      document.getElementById("editName1").value = namesCache.person1;
+      document.getElementById("editName2").value = namesCache.person2;
+      updatePartnerUI();
+    } catch(e) { console.error("loadNames:", e); }
   }
 
   async function saveNames() {
-    const n1 = document.getElementById("editName1").value.trim() || "Person 1";
-    const n2 = document.getElementById("editName2").value.trim() || "Person 2";
-    if (supabase) {
-      await supabase.from("names").upsert([
-        { person_id: "person1", name: n1 },
-        { person_id: "person2", name: n2 }
-      ]);
-    }
+    var n1 = document.getElementById("editName1").value.trim() || "Person 1";
+    var n2 = document.getElementById("editName2").value.trim() || "Person 2";
+    try {
+      if (supabase) {
+        await supabase.from("names").upsert([
+          { person_id: "person1", name: n1 },
+          { person_id: "person2", name: n2 }
+        ]);
+      }
+    } catch(e) { console.error("saveNames:", e); }
     namesCache = { person1: n1, person2: n2 };
     toast("Names saved");
     toggleNameEdit();
     updatePartnerUI();
   }
 
-  function toggleNameEdit() {
-    const card = document.getElementById("nameCard");
-    card.style.display = card.style.display === "none" ? "block" : "none";
-  }
-
-  // ---- Data ----
+  // -- Availability --
   async function loadAvailability() {
-    if (!supabase) return;
-    const { data } = await supabase
-      .from("availability")
-      .select("*")
-      .eq("lunch_date", todayStr);
-
-    myData = null;
-    partnerData = null;
-
-    if (data) {
-      data.forEach(row => {
-        if (row.person_id === myId) myData = row;
-        else partnerData = row;
-      });
-    }
-
-    // Populate my fields
-    if (myData) {
-      document.getElementById("startTime").value = myData.start_time || "";
-      document.getElementById("endTime").value = myData.end_time || "";
-      document.getElementById("clearBtn").style.display = "block";
-      document.getElementById("saveBtn").textContent = "Update";
-    } else {
-      document.getElementById("startTime").value = "";
-      document.getElementById("endTime").value = "";
-      document.getElementById("clearBtn").style.display = "none";
-      document.getElementById("saveBtn").textContent = "Save";
-    }
-
-    updatePartnerUI();
-    updateOverlap();
+    try {
+      if (!supabase) return;
+      var result = await supabase.from("availability").select("*").eq("lunch_date", todayStr);
+      myData = null;
+      partnerData = null;
+      if (result.data) {
+        result.data.forEach(function(row) {
+          if (row.person_id === myId) myData = row;
+          else partnerData = row;
+        });
+      }
+      if (myData) {
+        document.getElementById("startTime").value = myData.start_time || "";
+        document.getElementById("endTime").value = myData.end_time || "";
+        document.getElementById("clearBtn").style.display = "block";
+        document.getElementById("saveBtn").textContent = "Update";
+      } else {
+        document.getElementById("startTime").value = "";
+        document.getElementById("endTime").value = "";
+        document.getElementById("clearBtn").style.display = "none";
+        document.getElementById("saveBtn").textContent = "Save";
+      }
+      updatePartnerUI();
+      updateOverlap();
+    } catch(e) { console.error("loadAvailability:", e); }
   }
 
   async function saveAvailability() {
-    const start = document.getElementById("startTime").value;
-    const end = document.getElementById("endTime").value;
+    var start = document.getElementById("startTime").value;
+    var end = document.getElementById("endTime").value;
     if (!start || !end) { toast("Pick both start and end times"); return; }
     if (start >= end) { toast("End time must be after start"); return; }
-    if (!supabase) { toast("Supabase not configured yet"); return; }
-
-    const { error } = await supabase.from("availability").upsert({
-      person_id: myId,
-      lunch_date: todayStr,
-      start_time: start,
-      end_time: end,
-      updated_at: new Date().toISOString()
-    });
-
-    if (error) {
-      toast("Error saving — check console");
-      console.error(error);
-    } else {
-      toast("Saved ✓");
-      await loadAvailability();
-    }
+    if (!supabase) { toast("Not connected"); return; }
+    try {
+      var result = await supabase.from("availability").upsert({
+        person_id: myId, lunch_date: todayStr,
+        start_time: start, end_time: end, updated_at: new Date().toISOString()
+      });
+      if (result.error) { toast("Error — check console"); console.error(result.error); }
+      else { toast("Saved ✓"); await loadAvailability(); }
+    } catch(e) { toast("Error saving"); console.error(e); }
   }
 
   async function clearAvailability() {
-    if (!supabase) return;
-    await supabase
-      .from("availability")
-      .delete()
-      .eq("person_id", myId)
-      .eq("lunch_date", todayStr);
-    document.getElementById("startTime").value = "";
-    document.getElementById("endTime").value = "";
-    toast("Cleared");
-    await loadAvailability();
+    try {
+      if (!supabase) return;
+      await supabase.from("availability").delete().eq("person_id", myId).eq("lunch_date", todayStr);
+      document.getElementById("startTime").value = "";
+      document.getElementById("endTime").value = "";
+      toast("Cleared");
+      await loadAvailability();
+    } catch(e) { console.error("clearAvailability:", e); }
   }
 
-  // ---- Partner UI ----
+  // -- UI --
   function updatePartnerUI() {
-    const label = document.getElementById("partnerLabel");
-    const content = document.getElementById("partnerContent");
+    var label = document.getElementById("partnerLabel");
+    var content = document.getElementById("partnerContent");
     if (!myId) return;
-    const pName = partnerName();
+    var pName = partnerName();
     label.textContent = pName + "'s lunch window";
-
     if (partnerData && partnerData.start_time && partnerData.end_time) {
-      const updatedAgo = partnerData.updated_at ? timeAgo(new Date(partnerData.updated_at).getTime()) : "";
-      content.innerHTML = `
-        <div class="partner-time">
-          <div class="range">${fmtTime(partnerData.start_time)} – ${fmtTime(partnerData.end_time)}</div>
-          ${updatedAgo ? `<div class="updated">Set ${updatedAgo}</div>` : ""}
-        </div>`;
+      var updatedAgo = partnerData.updated_at ? timeAgo(new Date(partnerData.updated_at).getTime()) : "";
+      content.innerHTML =
+        '<div class="partner-time">' +
+        '<div class="range">' + fmtTime(partnerData.start_time) + ' – ' + fmtTime(partnerData.end_time) + '</div>' +
+        (updatedAgo ? '<div class="updated">Set ' + updatedAgo + '</div>' : '') +
+        '</div>';
     } else {
-      content.innerHTML = `
-        <div class="partner-status">
-          <div class="emoji">🤷</div>
-          <div class="message">${pName} hasn't set a lunch window today.</div>
-        </div>`;
+      content.innerHTML =
+        '<div class="partner-status">' +
+        '<div class="emoji">🤷</div>' +
+        '<div class="message">' + pName + ' hasn\'t set a lunch window today.</div>' +
+        '</div>';
     }
     document.getElementById("legendPartnerName").textContent = pName;
   }
 
-  // ---- Overlap ----
   function updateOverlap() {
-    const card = document.getElementById("overlapCard");
-    const hasYou = myData && myData.start_time && myData.end_time;
-    const hasPartner = partnerData && partnerData.start_time && partnerData.end_time;
-
+    var card = document.getElementById("overlapCard");
+    var hasYou = myData && myData.start_time && myData.end_time;
+    var hasPartner = partnerData && partnerData.start_time && partnerData.end_time;
     if (!hasYou && !hasPartner) { card.style.display = "none"; return; }
     card.style.display = "block";
 
-    const TL_START = 10 * 60, TL_END = 16 * 60, TL_RANGE = TL_END - TL_START;
-    function toMin(t) { const [h, m] = t.split(":").map(Number); return h * 60 + m; }
+    var TL_START = 600, TL_END = 960, TL_RANGE = 360;
+    function toMin(t) { var p = t.split(":"); return parseInt(p[0]) * 60 + parseInt(p[1]); }
     function pct(min) { return Math.max(0, Math.min(100, ((min - TL_START) / TL_RANGE) * 100)); }
 
-    const segYou = document.getElementById("segYou");
-    const segPartner = document.getElementById("segPartner");
-    const segOverlap = document.getElementById("segOverlap");
+    var segYou = document.getElementById("segYou");
+    var segPartner = document.getElementById("segPartner");
+    var segOverlap = document.getElementById("segOverlap");
 
     if (hasYou) {
-      const s = pct(toMin(myData.start_time)), e = pct(toMin(myData.end_time));
+      var s = pct(toMin(myData.start_time)), e = pct(toMin(myData.end_time));
       segYou.style.left = s + "%"; segYou.style.width = (e - s) + "%";
     } else { segYou.style.width = "0"; }
 
     if (hasPartner) {
-      const s = pct(toMin(partnerData.start_time)), e = pct(toMin(partnerData.end_time));
-      segPartner.style.left = s + "%"; segPartner.style.width = (e - s) + "%";
+      var s2 = pct(toMin(partnerData.start_time)), e2 = pct(toMin(partnerData.end_time));
+      segPartner.style.left = s2 + "%"; segPartner.style.width = (e2 - s2) + "%";
     } else { segPartner.style.width = "0"; }
 
-    const result = document.getElementById("overlapResult");
+    var result = document.getElementById("overlapResult");
     if (hasYou && hasPartner) {
-      const oStart = Math.max(toMin(myData.start_time), toMin(partnerData.start_time));
-      const oEnd = Math.min(toMin(myData.end_time), toMin(partnerData.end_time));
+      var oStart = Math.max(toMin(myData.start_time), toMin(partnerData.start_time));
+      var oEnd = Math.min(toMin(myData.end_time), toMin(partnerData.end_time));
       if (oStart < oEnd) {
-        const s = pct(oStart), e = pct(oEnd);
-        segOverlap.style.left = s + "%"; segOverlap.style.width = (e - s) + "%";
-        const dur = oEnd - oStart;
+        var os = pct(oStart), oe = pct(oEnd);
+        segOverlap.style.left = os + "%"; segOverlap.style.width = (oe - os) + "%";
+        var dur = oEnd - oStart;
         result.className = "overlap-result has-overlap";
-        result.innerHTML = `<div class="label">You can eat together</div><div class="value">${fmtTime(minToTime(oStart))} – ${fmtTime(minToTime(oEnd))} (${dur} min)</div>`;
+        result.innerHTML = '<div class="label">You can eat together</div><div class="value">' +
+          fmtTime(minToTime(oStart)) + ' – ' + fmtTime(minToTime(oEnd)) + ' (' + dur + ' min)</div>';
       } else {
         segOverlap.style.width = "0";
         result.className = "overlap-result no-overlap";
-        result.innerHTML = `<div class="label">No overlap today</div><div class="value">Different schedules 😕</div>`;
+        result.innerHTML = '<div class="label">No overlap today</div><div class="value">Different schedules 😕</div>';
       }
       result.style.display = "block";
     } else {
@@ -682,39 +553,61 @@
     }
   }
 
-  // ---- Helpers ----
+  // -- Helpers --
   function fmtTime(t) {
-    const [h, m] = t.split(":").map(Number);
-    const ampm = h >= 12 ? "PM" : "AM";
-    const h12 = h % 12 || 12;
-    return m === 0 ? `${h12} ${ampm}` : `${h12}:${String(m).padStart(2, "0")} ${ampm}`;
+    var p = t.split(":"), h = parseInt(p[0]), m = parseInt(p[1]);
+    var ampm = h >= 12 ? "PM" : "AM";
+    var h12 = h % 12 || 12;
+    return m === 0 ? h12 + " " + ampm : h12 + ":" + String(m).padStart(2, "0") + " " + ampm;
   }
-
   function minToTime(min) {
-    return `${String(Math.floor(min / 60)).padStart(2, "0")}:${String(min % 60).padStart(2, "0")}`;
+    return String(Math.floor(min / 60)).padStart(2, "0") + ":" + String(min % 60).padStart(2, "0");
   }
-
   function timeAgo(ts) {
-    const diff = Math.floor((Date.now() - ts) / 1000);
+    var diff = Math.floor((Date.now() - ts) / 1000);
     if (diff < 60) return "just now";
     if (diff < 3600) return Math.floor(diff / 60) + " min ago";
     if (diff < 86400) return Math.floor(diff / 3600) + "h ago";
     return "";
   }
-
   function setConnected(v) {
     document.getElementById("connDot").classList.toggle("connected", v);
     document.getElementById("connLabel").textContent = v ? "Synced" : "Offline";
   }
-
   function toast(msg) {
-    const el = document.getElementById("toast");
+    var el = document.getElementById("toast");
     el.textContent = msg;
     el.classList.add("show");
-    setTimeout(() => el.classList.remove("show"), 2000);
+    setTimeout(function() { el.classList.remove("show"); }, 2000);
   }
 
-  init();
+  // -- Boot --
+  async function connectAndStart() {
+    var config = getConfig();
+    if (!config) { showScreen("screenConfig"); return; }
+
+    try {
+      supabase = window.supabase.createClient(config.url, config.key);
+      setConnected(true);
+      await loadNames();
+      supabase.channel("lunch-sync")
+        .on("postgres_changes", { event: "*", schema: "public", table: "availability" }, function() { loadAvailability(); })
+        .on("postgres_changes", { event: "*", schema: "public", table: "names" }, function() { loadNames(); })
+        .subscribe();
+    } catch(e) {
+      console.error("Connection error:", e);
+      setConnected(false);
+    }
+
+    if (myId) {
+      showScreen("screenMain");
+      try { await loadAvailability(); } catch(e) {}
+    } else {
+      showScreen("screenSetup");
+    }
+  }
+
+  connectAndStart();
 </script>
 
 </body>
