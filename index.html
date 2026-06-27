@@ -315,12 +315,12 @@
       var m = slots[i];
       var row = document.createElement("div");
       row.className = "grid-row";
-      if (m % 30 === 15) row.classList.add("half-hour");
+      if (m % 60 === 0) row.classList.add("half-hour");
 
-      // Time label (only on the hour and half-hour)
+      // Time label (every 15 min)
       var label = document.createElement("div");
       label.className = "grid-time";
-      if (m % 30 === 0) label.textContent = fmtMin(m);
+      label.textContent = fmtMin(m);
       row.appendChild(label);
 
       // My cell
