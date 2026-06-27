@@ -170,7 +170,7 @@
   </header>
 
   <!-- Screen 1: Supabase config (first time only per device) -->
-  <div class="screen active" id="screenConfig">
+  <div class="screen" id="screenConfig">
     <div class="setup-screen" style="padding-top:20px; text-align:left;">
       <h2 style="text-align:center;">First-time setup</h2>
       <p style="text-align:center;">Paste your Supabase credentials below. You only need to do this once per device.</p>
@@ -285,7 +285,7 @@
   //  Stored in localStorage after first-time setup.
   // =============================================
 
-  let supabase = null;
+  let db = null;
   let myId = null;
   let myData = null;
   let partnerData = null;
@@ -361,7 +361,7 @@
         localStorage.removeItem("lunchsync_key");
         localStorage.removeItem("lunchsync_identity");
       } catch(e) {}
-      supabase = null;
+      db = null;
       myId = null;
       showScreen("screenConfig");
     }
@@ -373,7 +373,7 @@
     try { localStorage.setItem("lunchsync_identity", id); } catch(e) {}
     showScreen("screenMain");
     updatePartnerUI();
-    if (supabase) { loadAvailability().catch(function(e) { console.error(e); }); }
+    if (db) { loadAvailability().catch(function(e) { console.error(e); }); }
   }
 
   function switchIdentity() {
@@ -395,8 +395,8 @@
 
   async function loadNames() {
     try {
-      if (!supabase) return;
-      var result = await supabase.from("names").select("*");
+      if (!db) return;
+      var result = await db.from("names").select("*");
       if (result.data) {
         result.data.forEach(function(row) { namesCache[row.person_id] = row.name; });
       }
@@ -412,8 +412,8 @@
     var n1 = document.getElementById("editName1").value.trim() || "Person 1";
     var n2 = document.getElementById("editName2").value.trim() || "Person 2";
     try {
-      if (supabase) {
-        await supabase.from("names").upsert([
+      if (db) {
+        await db.from("names").upsert([
           { person_id: "person1", name: n1 },
           { person_id: "person2", name: n2 }
         ]);
@@ -428,8 +428,8 @@
   // -- Availability --
   async function loadAvailability() {
     try {
-      if (!supabase) return;
-      var result = await supabase.from("availability").select("*").eq("lunch_date", todayStr);
+      if (!db) return;
+      var result = await db.from("availability").select("*").eq("lunch_date", todayStr);
       myData = null;
       partnerData = null;
       if (result.data) {
@@ -459,9 +459,9 @@
     var end = document.getElementById("endTime").value;
     if (!start || !end) { toast("Pick both start and end times"); return; }
     if (start >= end) { toast("End time must be after start"); return; }
-    if (!supabase) { toast("Not connected"); return; }
+    if (!db) { toast("Not connected"); return; }
     try {
-      var result = await supabase.from("availability").upsert({
+      var result = await db.from("availability").upsert({
         person_id: myId, lunch_date: todayStr,
         start_time: start, end_time: end, updated_at: new Date().toISOString()
       });
@@ -472,8 +472,8 @@
 
   async function clearAvailability() {
     try {
-      if (!supabase) return;
-      await supabase.from("availability").delete().eq("person_id", myId).eq("lunch_date", todayStr);
+      if (!db) return;
+      await db.from("availability").delete().eq("person_id", myId).eq("lunch_date", todayStr);
       document.getElementById("startTime").value = "";
       document.getElementById("endTime").value = "";
       toast("Cleared");
@@ -587,10 +587,10 @@
     if (!config) { showScreen("screenConfig"); return; }
 
     try {
-      supabase = window.supabase.createClient(config.url, config.key);
+      db = window.supabase.createClient(config.url, config.key);
       setConnected(true);
       await loadNames();
-      supabase.channel("lunch-sync")
+      db.channel("lunch-sync")
         .on("postgres_changes", { event: "*", schema: "public", table: "availability" }, function() { loadAvailability(); })
         .on("postgres_changes", { event: "*", schema: "public", table: "names" }, function() { loadNames(); })
         .subscribe();
