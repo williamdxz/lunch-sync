@@ -61,7 +61,7 @@
     /* ===== Time Grid ===== */
     .grid-wrap { user-select: none; -webkit-user-select: none; touch-action: none; }
     .grid-header {
-      display: grid; grid-template-columns: 52px 1fr 1fr; gap: 0;
+      display: grid; grid-template-columns: 56px 1fr 1fr; gap: 0;
       margin-bottom: 4px; padding: 0 2px;
     }
     .grid-header span {
@@ -75,7 +75,7 @@
       position: relative; isolation: isolate;
     }
     .grid-row {
-      display: grid; grid-template-columns: 52px 1fr 1fr;
+      display: grid; grid-template-columns: 56px 1fr 1fr;
       border-bottom: 1px solid #f0efec; min-height: 24px;
     }
     .grid-row:last-child { border-bottom: none; }
@@ -223,6 +223,10 @@
         <span><span class="legend-swatch" style="background:var(--overlap-bg)"></span>Overlap</span>
       </div>
       <div class="overlap-result" id="overlapResult" style="display:none"></div>
+      <div id="selectedRange" style="display:none;text-align:center;margin-top:14px;padding:10px 12px;background:var(--green-light);border-radius:10px;">
+        <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);">Your available time</div>
+        <div id="selectedRangeText" style="font-size:20px;font-weight:700;color:var(--green);margin-top:2px;"></div>
+      </div>
       <div class="btn-row">
         <button class="btn btn-primary" id="saveBtn" onclick="saveAvailability()" style="flex:1">Save</button>
       </div>
@@ -306,10 +310,10 @@
   function fmtMin(m) { return fmtTime(minToStr(m)); }
   function fmtGrid(m) {
     var h = Math.floor(m / 60), mm = m % 60;
-    var ampm = h >= 12 ? "p" : "a";
+    var ampm = h >= 12 ? "pm" : "am";
     var h12 = h % 12 || 12;
     if (mm === 0) return h12 + ampm;
-    return h12 + ":" + String(mm).padStart(2, "0");
+    return h12 + ":" + String(mm).padStart(2, "0") + ampm;
   }
 
   // =============================================
@@ -520,6 +524,14 @@
   function updateSaveButton() {
     document.getElementById("clearBtn").style.display = mySlots.size > 0 ? "block" : "none";
     document.getElementById("saveBtn").textContent = (myData && myData.start_time) ? "Update" : "Save";
+    var rangeEl = document.getElementById("selectedRange");
+    var range = slotsToRange();
+    if (range) {
+      document.getElementById("selectedRangeText").textContent = fmtTime(range.start) + " – " + fmtTime(range.end);
+      rangeEl.style.display = "block";
+    } else {
+      rangeEl.style.display = "none";
+    }
   }
 
   function updateOverlapBanner(partnerSlots) {
