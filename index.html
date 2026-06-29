@@ -411,9 +411,11 @@
     if (dragStart < 0) return;
     var lo = Math.min(dragStart, dragEnd);
     var hi = Math.max(dragStart, dragEnd);
-    for (var i = lo; i <= hi; i++) {
-      if (dragMode === "add") mySlots.add(i);
-      else mySlots.delete(i);
+    if (dragMode === "add") {
+      mySlots = new Set();
+      for (var i = lo; i <= hi; i++) mySlots.add(i);
+    } else {
+      for (var i = lo; i <= hi; i++) mySlots.delete(i);
     }
     dragStart = -1;
     dragEnd = -1;
@@ -498,6 +500,23 @@
   // =============================================
   //  Slot ↔ time conversion
   // =============================================
+  function slotsToRanges(slotSet) {
+    if (slotSet.size === 0) return [];
+    var idxs = Array.from(slotSet).sort(function(a, b) { return a - b; });
+    var ranges = [];
+    var start = idxs[0];
+    var prev = idxs[0];
+    for (var i = 1; i < idxs.length; i++) {
+      if (idxs[i] !== prev + 1) {
+        ranges.push({ start: minToStr(slots[start]), end: minToStr(slots[prev] + SLOT_MIN) });
+        start = idxs[i];
+      }
+      prev = idxs[i];
+    }
+    ranges.push({ start: minToStr(slots[start]), end: minToStr(slots[prev] + SLOT_MIN) });
+    return ranges;
+  }
+
   function slotsToRange() {
     if (mySlots.size === 0) return null;
     var idxs = Array.from(mySlots).sort(function(a, b) { return a - b; });
@@ -514,9 +533,22 @@
     return set;
   }
 
+  function jsonToSlots(json) {
+    try {
+      var arr = JSON.parse(json);
+      return new Set(arr);
+    } catch(e) { return null; }
+  }
+
   function getPartnerSlots() {
-    if (partnerData && partnerData.start_time && partnerData.end_time) {
-      return rangeToSlots(partnerData.start_time, partnerData.end_time);
+    if (partnerData) {
+      if (partnerData.slots) {
+        var s = jsonToSlots(partnerData.slots);
+        if (s) return s;
+      }
+      if (partnerData.start_time && partnerData.end_time) {
+        return rangeToSlots(partnerData.start_time, partnerData.end_time);
+      }
     }
     return new Set();
   }
@@ -525,9 +557,10 @@
     document.getElementById("clearBtn").style.display = mySlots.size > 0 ? "block" : "none";
     document.getElementById("saveBtn").textContent = (myData && myData.start_time) ? "Update" : "Save";
     var rangeEl = document.getElementById("selectedRange");
-    var range = slotsToRange();
-    if (range) {
-      document.getElementById("selectedRangeText").textContent = fmtTime(range.start) + " – " + fmtTime(range.end);
+    var ranges = slotsToRanges(mySlots);
+    if (ranges.length > 0) {
+      var html = ranges.map(function(r) { return fmtTime(r.start) + " – " + fmtTime(r.end); }).join('<span style="display:block;font-size:12px;color:var(--text-muted);margin:2px 0;">and</span>');
+      document.getElementById("selectedRangeText").innerHTML = html;
       rangeEl.style.display = "block";
     } else {
       rangeEl.style.display = "none";
@@ -537,15 +570,14 @@
   function updateOverlapBanner(partnerSlots) {
     var result = document.getElementById("overlapResult");
     if (mySlots.size === 0 || partnerSlots.size === 0) { result.style.display = "none"; return; }
-    var overlapIdxs = [];
-    mySlots.forEach(function(i) { if (partnerSlots.has(i)) overlapIdxs.push(i); });
-    if (overlapIdxs.length > 0) {
-      overlapIdxs.sort(function(a, b) { return a - b; });
-      var oStart = slots[overlapIdxs[0]];
-      var oEnd = slots[overlapIdxs[overlapIdxs.length - 1]] + SLOT_MIN;
+    var overlapSet = new Set();
+    mySlots.forEach(function(i) { if (partnerSlots.has(i)) overlapSet.add(i); });
+    if (overlapSet.size > 0) {
+      var ranges = slotsToRanges(overlapSet);
+      var totalMin = overlapSet.size * SLOT_MIN;
+      var rangeStr = ranges.map(function(r) { return fmtTime(r.start) + ' – ' + fmtTime(r.end); }).join(', ');
       result.className = "overlap-result has-overlap";
-      result.innerHTML = '<div class="ov-label">You can eat together</div><div class="ov-value">' +
-        fmtMin(oStart) + ' – ' + fmtMin(oEnd) + ' (' + (oEnd - oStart) + ' min)</div>';
+      result.innerHTML = '<div class="ov-label">You can eat together (' + totalMin + ' min)</div><div class="ov-value">' + rangeStr + '</div>';
       result.style.display = "block";
     } else {
       result.className = "overlap-result no-overlap";
@@ -665,8 +697,13 @@
         });
       }
       mySlots = new Set();
-      if (myData && myData.start_time && myData.end_time) {
-        mySlots = rangeToSlots(myData.start_time, myData.end_time);
+      if (myData) {
+        if (myData.slots) {
+          var parsed = jsonToSlots(myData.slots);
+          if (parsed) mySlots = parsed;
+        } else if (myData.start_time && myData.end_time) {
+          mySlots = rangeToSlots(myData.start_time, myData.end_time);
+        }
       }
       renderGrid();
     } catch(e) { console.error("loadAvailability:", e); }
@@ -680,6 +717,7 @@
       var result = await db.from("availability").upsert({
         person_id: myId, lunch_date: todayStr,
         start_time: range.start, end_time: range.end,
+        slots: JSON.stringify(Array.from(mySlots)),
         updated_at: new Date().toISOString()
       });
       if (result.error) { toast("Error — check console"); console.error(result.error); }
