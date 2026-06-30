@@ -411,11 +411,9 @@
     if (dragStart < 0) return;
     var lo = Math.min(dragStart, dragEnd);
     var hi = Math.max(dragStart, dragEnd);
-    if (dragMode === "add") {
-      mySlots = new Set();
-      for (var i = lo; i <= hi; i++) mySlots.add(i);
-    } else {
-      for (var i = lo; i <= hi; i++) mySlots.delete(i);
+    for (var i = lo; i <= hi; i++) {
+      if (dragMode === "add") mySlots.add(i);
+      else mySlots.delete(i);
     }
     dragStart = -1;
     dragEnd = -1;
