@@ -11,7 +11,7 @@ A simple web app for two people working from home to coordinate lunch. Drag to s
 - **Overlap detection** — see exactly when you can eat together
 - **Mobile-first** — designed for quick use on your phone during the workday
 - **Resets daily** — only shows today's availability
-- **No accounts** — just pick Person 1 or Person 2 on each device
+- **No accounts** — just pick Person 1 or Person 2 on each device. the user accounts are saved locally. 
 
 ## Tech
 
